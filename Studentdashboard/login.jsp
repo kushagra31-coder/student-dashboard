@@ -51,9 +51,9 @@
             <% } %>
             <form action="${pageContext.request.contextPath}/login" method="post">
                 <input type="text" name="id" class="form-control mb-3" placeholder="Student ID (or Admin ID)" required>
-                <div class="input-group mb-3">
-                    <input type="password" name="password" class="form-control" placeholder="Password" required>
-                    <button class="btn btn-outline-secondary" type="button" id="pwd-toggle" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #fff;">
+                <div class="position-relative mb-3">
+                    <input type="password" name="password" class="form-control mb-0" placeholder="Password" required style="padding-right: 40px;">
+                    <button type="button" id="pwd-toggle" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-secondary);">
                         <i class="bi bi-eye-fill"></i>
                     </button>
                 </div>
