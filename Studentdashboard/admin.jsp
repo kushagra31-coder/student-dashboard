@@ -101,18 +101,35 @@
                         </c:when>
                         <c:otherwise>
                             <table class="admin-table">
-                                <thead><tr><th>User</th><th>Role</th><th>Login Time</th><th>IP Address</th></tr></thead>
+                                <thead><tr><th>User</th><th>Role</th><th>Login Time</th></tr></thead>
                                 <tbody>
-                                    <c:forEach var="log" items="${loginLogs}">
+                                    <c:forEach var="log" items="${loginLogs}" begin="0" end="4">
                                         <tr>
                                             <td style="color: #fff;">${log.userName} <span class="text-secondary">(ID: ${log.userId})</span></td>
                                             <td><span class="badge" style="background: rgba(201,168,76,0.15); color: #c9a84c;">${log.role}</span></td>
                                             <td>${log.loginTime}</td>
-                                            <td style="font-family: monospace; color: #00d4ff;">${log.ipAddress}</td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
+                                <c:if test="${fn:length(loginLogs) > 5}">
+                                    <tbody class="collapse" id="olderLogs">
+                                        <c:forEach var="log" items="${loginLogs}" begin="5">
+                                            <tr>
+                                                <td style="color: #fff;">${log.userName} <span class="text-secondary">(ID: ${log.userId})</span></td>
+                                                <td><span class="badge" style="background: rgba(201,168,76,0.15); color: #c9a84c;">${log.role}</span></td>
+                                                <td>${log.loginTime}</td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </c:if>
                             </table>
+                            <c:if test="${fn:length(loginLogs) > 5}">
+                                <div class="text-center mt-3">
+                                    <button class="btn btn-outline-light btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#olderLogs" aria-expanded="false" style="border-color: rgba(255,255,255,0.2); color: #ccc;">
+                                        Show Older Logs
+                                    </button>
+                                </div>
+                            </c:if>
                         </c:otherwise>
                     </c:choose>
                 </div>

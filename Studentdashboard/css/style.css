@@ -1094,6 +1094,7 @@ code, .font-mono {
   background: rgba(10, 10, 26, 0.85);
   border-right: 1px solid var(--glass-border);
   border-radius: 0;
+  overflow-y: auto;
 }
 
 .sidebar-brand {
@@ -1201,10 +1202,22 @@ code, .font-mono {
   color: #4a5568 !important;
 }
 [data-theme='light'] .glass-card, [data-theme='light'] .sidebar {
-  background: var(--bg-card);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  color: var(--text-primary);
+  background: var(--bg-card) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+  color: var(--text-primary) !important;
+}
+[data-theme='light'] h1, [data-theme='light'] h2, [data-theme='light'] h3, [data-theme='light'] .section-title {
+  color: var(--text-primary) !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+}
+[data-theme='light'] td[style*="color: #fff"] {
+  color: var(--text-primary) !important;
+}
+[data-theme='light'] .form-control {
+  background: #ffffff !important;
+  color: var(--text-primary) !important;
+  border: 1px solid #cbd5e1 !important;
 }
 [data-theme='light'] .sidebar-brand span {
     background: linear-gradient(135deg, #d97706, #2563eb) !important;

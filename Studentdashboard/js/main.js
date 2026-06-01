@@ -450,7 +450,15 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateToggleIcon(theme) {
       const btn = document.getElementById('theme-toggle');
       if (!btn) return;
-      btn.innerHTML = theme === 'dark' ? '<i class="bi bi-sun-fill" style="color:#fb923c;"></i>' : '<i class="bi bi-moon-fill" style="color:#1a0a2e;"></i>';
+      const iconStr = theme === 'dark' ? '<i class="bi bi-sun-fill" style="color:#fb923c; margin-right: 8px;"></i>' : '<i class="bi bi-moon-fill" style="color:#1a0a2e; margin-right: 8px;"></i>';
+      const textStr = theme === 'dark' ? 'Light Mode' : 'Dark Mode';
+      
+      const textSpan = document.getElementById('theme-text');
+      if (textSpan) {
+          btn.innerHTML = iconStr + '<span id="theme-text">' + textStr + '</span>';
+      } else {
+          btn.innerHTML = iconStr;
+      }
   }
 
   /* ------------------------------------------
