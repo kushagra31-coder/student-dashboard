@@ -1171,3 +1171,43 @@ code, .font-mono {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ---------- LIGHT THEME OVERRIDES ---------- */
+[data-theme='light'] {
+  --bg-dark:        #f0f4f8;
+  --bg-deep:        #ffffff;
+  --bg-purple:      #e2e8f0;
+  --bg-card:        rgba(255, 255, 255, 0.8);
+  --bg-card-hover:  rgba(255, 255, 255, 1);
+  --text-primary:   #1a202c;
+  --text-secondary: #4a5568;
+  --text-muted:     #a0aec0;
+  --glass-bg:       rgba(255, 255, 255, 0.7);
+  --glass-border:   rgba(0, 0, 0, 0.05);
+  --glass-border-hover: rgba(0, 0, 0, 0.1);
+  --glass-shadow:   0 8px 32px rgba(0, 0, 0, 0.05);
+  --gradient-hero:  linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 40%, #edf2f7 70%, #f0f4f8 100%);
+}
+
+[data-theme='light'] .dashboard-main,
+[data-theme='light'] .login-wrapper {
+  color: var(--text-primary);
+}
+
+[data-theme='light'] .admin-table thead th {
+  color: #1a202c;
+}
+[data-theme='light'] .admin-table tbody td {
+  color: #4a5568 !important;
+}
+[data-theme='light'] .glass-card, [data-theme='light'] .sidebar {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  color: var(--text-primary);
+}
+[data-theme='light'] .sidebar-brand span {
+    background: linear-gradient(135deg, #d97706, #2563eb) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}

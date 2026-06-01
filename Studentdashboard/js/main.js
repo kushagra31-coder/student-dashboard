@@ -211,121 +211,259 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ------------------------------------------
-     7. PARTICLE / FLOATING ORB BACKGROUND
+     7. EPIC SPACE BACKGROUND
      ------------------------------------------ */
   const canvas = document.getElementById('particle-canvas');
   if (canvas) {
     const ctx = canvas.getContext('2d');
-    let width, height, orbs;
+    let width, height;
+    
+    // Elements
+    let stars = [];
+    let planets = [];
+    let shootingStars = [];
+    let angle = 0; // For rotation
 
     function resizeCanvas() {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     }
 
-    class Orb {
+    class Star {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.r = Math.random() * 1.5;
+        this.alpha = Math.random();
+        this.fade = (Math.random() * 0.02) + 0.005;
+      }
+      update() {
+        this.alpha += this.fade;
+        if (this.alpha >= 1 || this.alpha <= 0.1) this.fade *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+        ctx.fill();
+      }
+    }
+
+    class Planet {
+      constructor(dist, radius, speed, color) {
+        this.dist = dist;
+        this.radius = radius;
+        this.speed = speed;
+        this.color = color;
+        this.angle = Math.random() * Math.PI * 2;
+      }
+      update() {
+        this.angle += this.speed;
+      }
+      draw(cx, cy) {
+        const x = cx + Math.cos(this.angle) * this.dist;
+        const y = cy + Math.sin(this.angle) * this.dist;
+        ctx.beginPath();
+        ctx.arc(x, y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = this.color;
+        ctx.fill();
+        ctx.shadowBlur = 0; // reset
+      }
+    }
+
+    class ShootingStar {
       constructor() {
         this.reset();
       }
-
       reset() {
         this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.radius = Math.random() * 2.5 + 0.5;
-        this.vx = (Math.random() - 0.5) * 0.3;
-        this.vy = (Math.random() - 0.5) * 0.3;
-        this.opacity = Math.random() * 0.4 + 0.1;
-        this.opacityDir = (Math.random() - 0.5) * 0.005;
-
-        // Choose a random accent color
-        const colors = [
-          [0, 212, 255],    // blue
-          [124, 58, 237],   // purple
-          [244, 114, 182],  // pink
-        ];
-        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.y = -50;
+        this.len = Math.random() * 80 + 30;
+        this.speed = Math.random() * 10 + 5;
+        this.active = false;
+        this.wait = Math.random() * 500 + 100; // frames to wait
       }
-
       update() {
-        this.x += this.vx;
-        this.y += this.vy;
-
-        // Oscillate opacity
-        this.opacity += this.opacityDir;
-        if (this.opacity > 0.5 || this.opacity < 0.05) {
-          this.opacityDir *= -1;
+        if (!this.active) {
+          this.wait--;
+          if (this.wait <= 0) this.active = true;
+          return;
         }
-
-        // Wrap around edges
-        if (this.x < -10) this.x = width + 10;
-        if (this.x > width + 10) this.x = -10;
-        if (this.y < -10) this.y = height + 10;
-        if (this.y > height + 10) this.y = -10;
+        this.x -= this.speed;
+        this.y += this.speed;
+        if (this.x < 0 || this.y > height) this.reset();
       }
-
       draw() {
-        const [r, g, b] = this.color;
+        if (!this.active) return;
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.opacity})`;
-        ctx.fill();
-
-        // Subtle glow
-        if (this.radius > 1.5) {
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.radius * 3, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.opacity * 0.15})`;
-          ctx.fill();
-        }
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x + this.len, this.y - this.len);
+        const grad = ctx.createLinearGradient(this.x, this.y, this.x + this.len, this.y - this.len);
+        grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+        grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 2;
+        ctx.stroke();
       }
     }
 
-    function initOrbs() {
-      const count = Math.min(80, Math.floor((width * height) / 15000));
-      orbs = Array.from({ length: count }, () => new Orb());
+    function initSpace() {
+      stars = Array.from({ length: 250 }, () => new Star());
+      planets = [
+        new Planet(80, 4, 0.01, '#00d4ff'),
+        new Planet(140, 8, 0.005, '#fb923c'),
+        new Planet(220, 12, 0.002, '#34d399'),
+        new Planet(300, 6, 0.003, '#f472b6')
+      ];
+      shootingStars = Array.from({ length: 3 }, () => new ShootingStar());
+    }
+
+    function drawNebula() {
+      // Pink/Purple Nebula
+      const g1 = ctx.createRadialGradient(width * 0.8, height * 0.2, 0, width * 0.8, height * 0.2, 500);
+      g1.addColorStop(0, 'rgba(124, 58, 237, 0.15)');
+      g1.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = g1;
+      ctx.fillRect(0, 0, width, height);
+
+      // Blue Nebula
+      const g2 = ctx.createRadialGradient(width * 0.2, height * 0.8, 0, width * 0.2, height * 0.8, 400);
+      g2.addColorStop(0, 'rgba(0, 212, 255, 0.1)');
+      g2.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = g2;
+      ctx.fillRect(0, 0, width, height);
+    }
+
+    function drawBlackHole() {
+      const bhX = width * 0.85;
+      const bhY = height * 0.8;
+      
+      // Accretion disk
+      ctx.save();
+      ctx.translate(bhX, bhY);
+      ctx.rotate(angle * 2);
+      ctx.scale(1, 0.3); // squash to make it look 3D
+      
+      const grad = ctx.createRadialGradient(0, 0, 40, 0, 0, 150);
+      grad.addColorStop(0, 'rgba(0, 0, 0, 1)');
+      grad.addColorStop(0.3, 'rgba(124, 58, 237, 0.8)');
+      grad.addColorStop(0.6, 'rgba(0, 212, 255, 0.4)');
+      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      
+      ctx.beginPath();
+      ctx.arc(0, 0, 150, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+      ctx.restore();
+
+      // The hole itself
+      ctx.beginPath();
+      ctx.arc(bhX, bhY, 35, 0, Math.PI * 2);
+      ctx.fillStyle = '#000';
+      ctx.shadowBlur = 30;
+      ctx.shadowColor = '#7c3aed';
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+
+    function drawSolarSystem() {
+      const sunX = width * 0.15;
+      const sunY = height * 0.25;
+
+      // Sun Glow
+      const glow = ctx.createRadialGradient(sunX, sunY, 20, sunX, sunY, 150);
+      glow.addColorStop(0, 'rgba(251, 146, 60, 1)');
+      glow.addColorStop(0.2, 'rgba(251, 146, 60, 0.4)');
+      glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.beginPath();
+      ctx.arc(sunX, sunY, 150, 0, Math.PI * 2);
+      ctx.fillStyle = glow;
+      ctx.fill();
+
+      // Sun core
+      ctx.beginPath();
+      ctx.arc(sunX, sunY, 25, 0, Math.PI * 2);
+      ctx.fillStyle = '#fffbeb';
+      ctx.shadowBlur = 40;
+      ctx.shadowColor = '#fb923c';
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Planets
+      planets.forEach(p => p.draw(sunX, sunY));
     }
 
     function animate() {
+      // Clear with slight trailing effect if we wanted it, but let's clear full
       ctx.clearRect(0, 0, width, height);
 
-      orbs.forEach(orb => {
-        orb.update();
-        orb.draw();
-      });
-
-      // Draw subtle connection lines between nearby orbs
-      for (let i = 0; i < orbs.length; i++) {
-        for (let j = i + 1; j < orbs.length; j++) {
-          const dx = orbs[i].x - orbs[j].x;
-          const dy = orbs[i].y - orbs[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
-            const alpha = (1 - dist / 120) * 0.08;
-            ctx.beginPath();
-            ctx.moveTo(orbs[i].x, orbs[i].y);
-            ctx.lineTo(orbs[j].x, orbs[j].y);
-            ctx.strokeStyle = `rgba(124, 58, 237, ${alpha})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        }
+      // Light mode uses a different base, so we check if dark mode
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      if (!isLight) {
+          drawNebula();
+          stars.forEach(s => { s.update(); s.draw(); });
+          drawBlackHole();
+          drawSolarSystem();
+          shootingStars.forEach(s => { s.update(); s.draw(); });
+      } else {
+          // Subtle day stars or clear sky
+          ctx.fillStyle = 'rgba(240, 244, 248, 0.5)';
+          ctx.fillRect(0, 0, width, height);
       }
+
+      angle += 0.005;
+      planets.forEach(p => p.update());
 
       requestAnimationFrame(animate);
     }
 
     resizeCanvas();
-    initOrbs();
+    initSpace();
     animate();
 
-    let resizeTimeout;
     window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        resizeCanvas();
-        initOrbs();
-      }, 250);
+      resizeCanvas();
+      initSpace();
     });
+  }
+
+  /* ------------------------------------------
+     11. THEME TOGGLE (DARK/LIGHT)
+     ------------------------------------------ */
+  const themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateToggleIcon(savedTheme);
+      
+      themeToggle.addEventListener('click', () => {
+          const current = document.documentElement.getAttribute('data-theme') || 'dark';
+          const next = current === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', next);
+          localStorage.setItem('theme', next);
+          updateToggleIcon(next);
+      });
+  }
+
+  function updateToggleIcon(theme) {
+      const btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.innerHTML = theme === 'dark' ? '<i class="bi bi-sun-fill" style="color:#fb923c;"></i>' : '<i class="bi bi-moon-fill" style="color:#1a0a2e;"></i>';
+  }
+
+  /* ------------------------------------------
+     12. PASSWORD VISIBILITY TOGGLE
+     ------------------------------------------ */
+  const pwdToggle = document.getElementById('pwd-toggle');
+  const pwdInput = document.querySelector('input[name="password"]');
+  if (pwdToggle && pwdInput) {
+      pwdToggle.addEventListener('click', () => {
+          const isPassword = pwdInput.type === 'password';
+          pwdInput.type = isPassword ? 'text' : 'password';
+          pwdToggle.innerHTML = isPassword ? '<i class="bi bi-eye-slash-fill"></i>' : '<i class="bi bi-eye-fill"></i>';
+      });
   }
 
   /* ------------------------------------------

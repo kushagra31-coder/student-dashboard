@@ -37,7 +37,8 @@
     </style>
 </head>
 <body>
-    <canvas id="particle-canvas"></canvas>
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" class="btn btn-outline-light position-fixed top-0 end-0 m-3" style="z-index: 1000; border-radius: 50%; width: 45px; height: 45px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);"></button>
 
     <div class="login-wrapper">
         <div class="glass-card login-card fade-in-up">
@@ -49,9 +50,14 @@
                 </div>
             <% } %>
             <form action="${pageContext.request.contextPath}/login" method="post">
-                <input type="text" name="id" class="form-control" placeholder="Student ID (or Admin ID)" required>
-                <input type="password" name="password" class="form-control" placeholder="Password" required>
-                <button type="submit" class="btn-glow w-100 justify-content-center">Login</button>
+                <input type="text" name="id" class="form-control mb-3" placeholder="Student ID (or Admin ID)" required>
+                <div class="input-group mb-3">
+                    <input type="password" name="password" class="form-control" placeholder="Password" required>
+                    <button class="btn btn-outline-secondary" type="button" id="pwd-toggle" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #fff;">
+                        <i class="bi bi-eye-fill"></i>
+                    </button>
+                </div>
+                <button type="submit" class="btn-glow w-100 justify-content-center mt-2">Login</button>
             </form>
         </div>
     </div>

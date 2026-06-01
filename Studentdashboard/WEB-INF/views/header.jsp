@@ -27,6 +27,9 @@
 <!-- Particle / Floating Orb Canvas -->
 <canvas id="particle-canvas"></canvas>
 
+<!-- Theme Toggle -->
+<button id="theme-toggle" class="btn btn-outline-light position-fixed top-0 end-0 m-3" style="z-index: 1050; border-radius: 50%; width: 45px; height: 45px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);"><i class="bi bi-moon-fill"></i></button>
+
 <!-- ============ NAVBAR ============ -->
 <nav class="navbar navbar-expand-lg nav-glass fixed-top">
     <div class="container">
