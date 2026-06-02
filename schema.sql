@@ -6,6 +6,8 @@
 CREATE DATABASE IF NOT EXISTS portfolio_db;
 USE portfolio_db;
 
+SET FOREIGN_KEY_CHECKS = 0;
+
 -- ============================================
 -- Drop Existing Tables
 -- ============================================
@@ -16,6 +18,7 @@ DROP TABLE IF EXISTS attendance;
 DROP TABLE IF EXISTS login_logs;
 DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS skills;
+DROP TABLE IF EXISTS achievements;
 DROP TABLE IF EXISTS students;
 
 -- ============================================
@@ -58,6 +61,19 @@ CREATE TABLE skills (
     category VARCHAR(50) NOT NULL,
     name VARCHAR(100) NOT NULL,
     proficiency_percent INT DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ============================================
+-- Achievements Table
+-- ============================================
+CREATE TABLE achievements (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  student_id INT DEFAULT NULL,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  date_achieved DATE DEFAULT NULL,
+  icon VARCHAR(50) DEFAULT 'bi-trophy',
+  FOREIGN KEY (student_id) REFERENCES students (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ============================================
@@ -166,3 +182,13 @@ INSERT INTO attendance (student_id, subject, total_classes, attended, percentage
 (2, 'Computer Networks', 35, 28, 80.00),
 (3, 'Data Structures', 40, 32, 80.00),
 (3, 'Computer Networks', 35, 34, 97.14);
+
+-- ============================================
+-- Seed Data: Achievements
+-- ============================================
+INSERT INTO achievements (student_id, title, description, icon) VALUES
+(1, 'Hackathon Winner', '1st place in state hackathon', 'bi-trophy'),
+(2, 'UI Design Award', 'Best UI/UX for E-commerce app', 'bi-palette'),
+(3, 'Code Optimization', 'Top 5% in Algorithm coding competition', 'bi-code-slash');
+
+SET FOREIGN_KEY_CHECKS = 1;
