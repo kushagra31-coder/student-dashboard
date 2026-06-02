@@ -16,10 +16,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .badge-placed { background: rgba(57, 255, 20, 0.12); color: var(--accent-green); border: 1.5px solid var(--accent-green); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
-        .badge-interviewing { background: rgba(0, 242, 254, 0.12); color: var(--accent-blue); border: 1.5px solid var(--accent-blue); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
-        .badge-offered { background: rgba(255, 158, 0, 0.12); color: var(--accent-orange); border: 1.5px solid var(--accent-orange); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
-        .stat-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+        .stat-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
         .stat-overview .retro-window-body { padding: 1.5rem; text-align: center; }
         .stat-overview .stat-icon { font-size: 2.2rem; margin-bottom: 0.5rem; text-shadow: 0 0 10px rgba(0,242,254,0.3); }
         .stat-overview .stat-val { font-size: 2.5rem; font-weight: bold; font-family: 'JetBrains Mono', monospace; }
@@ -28,6 +25,38 @@
         .attendance-bar-fill { height: 100%; border-radius: 1px; transition: width 0.6s ease; }
         .attendance-good { background: linear-gradient(90deg, var(--accent-green), var(--accent-blue)); }
         .attendance-warn { background: linear-gradient(90deg, var(--accent-orange), var(--accent-pink)); }
+        
+        /* Modal styling variables custom overrides to match our Vaporwave styles */
+        .modal-content {
+            background: #12052c !important;
+            border: 2px solid var(--accent-pink) !important;
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.4) !important;
+            border-radius: 8px !important;
+            color: #fff !important;
+        }
+        .modal-header {
+            background: rgba(255, 0, 127, 0.15) !important;
+            border-bottom: 2px solid var(--glass-border) !important;
+        }
+        .modal-footer {
+            border-top: 1px solid var(--glass-border) !important;
+        }
+        .modal-header .btn-close {
+            filter: invert(1) grayscale(1) brightness(2);
+        }
+        [data-theme='light'] .modal-content {
+            background: #fff2e6 !important;
+            border: 2px solid var(--accent-blue) !important;
+            box-shadow: 0 0 20px rgba(0, 143, 149, 0.2) !important;
+            color: var(--text-primary) !important;
+        }
+        [data-theme='light'] .modal-header {
+            background: rgba(0, 143, 149, 0.1) !important;
+            border-bottom: 2px solid var(--glass-border) !important;
+        }
+        [data-theme='light'] .modal-header .btn-close {
+            filter: none;
+        }
     </style>
 </head>
 <body class="dashboard-body">
@@ -46,6 +75,18 @@
                 <h1 class="text-gradient" style="font-size: 2.2rem; display: inline-block;">Admin Dashboard</h1>
                 <p class="text-secondary" style="font-size: 1.15rem;">Manage students, track attendance, and monitor telemetry logs</p>
             </div>
+
+            <!-- Flash Alert Messages -->
+            <c:if test="${not empty msg}">
+                <div class="alert-glass alert-glass-success mb-4 reveal">
+                    <i class="bi bi-check-circle-fill me-2"></i>${msg}
+                </div>
+            </c:if>
+            <c:if test="${not empty msgError}">
+                <div class="alert-glass alert-glass-error mb-4 reveal">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>${msgError}
+                </div>
+            </c:if>
 
             <!-- Stats Overview -->
             <div class="stat-overview reveal">
@@ -69,17 +110,6 @@
                         <div class="stat-icon" style="color: var(--accent-pink);"><i class="bi bi-clock-history"></i></div>
                         <div class="stat-val text-gradient">${fn:length(loginLogs)}</div>
                         <div class="stat-lbl">Login Events</div>
-                    </div>
-                </div>
-                <div class="retro-window">
-                    <div class="retro-window-header">
-                        <span class="retro-window-title">Metric: PLC</span>
-                        <div class="retro-window-dots"><span class="retro-window-dot maximize"></span></div>
-                    </div>
-                    <div class="retro-window-body">
-                        <div class="stat-icon" style="color: var(--accent-green);"><i class="bi bi-briefcase-fill"></i></div>
-                        <div class="stat-val text-gradient">${fn:length(placements)}</div>
-                        <div class="stat-lbl">Placements</div>
                     </div>
                 </div>
                 <div class="retro-window">
@@ -109,7 +139,7 @@
                     <div class="retro-window-body">
                         <div class="admin-table-container">
                             <table class="admin-table">
-                                <thead><tr><th>ID</th><th>Name</th><th>Branch</th><th>Semester</th><th>Role</th><th>GitHub</th></tr></thead>
+                                <thead><tr><th>ID</th><th>Name</th><th>Branch</th><th>Semester</th><th>Role</th><th>Actions</th></tr></thead>
                                 <tbody>
                                     <c:forEach var="s" items="${students}">
                                         <c:if test="${s.role != 'admin'}">
@@ -120,9 +150,14 @@
                                             <td style="font-family: 'JetBrains Mono', monospace;">Sem ${s.semester}</td>
                                             <td><span class="badge" style="background: rgba(0, 242, 254, 0.1); color: var(--accent-blue); border: 1px solid var(--accent-blue);">${s.role}</span></td>
                                             <td>
-                                                <c:if test="${not empty s.githubUrl && s.githubUrl != '#'}">
-                                                    <a href="${s.githubUrl}" target="_blank" class="btn-sm-glass" style="width: 32px; height: 32px; font-size: 0.9rem;"><i class="bi bi-github"></i></a>
-                                                </c:if>
+                                                <div class="d-flex gap-2">
+                                                    <button class="btn btn-sm btn-retro btn-retro-cyan" onclick="openAddProjectModal(${s.id}, '${fn:escapeXml(s.name)}')">
+                                                        <span><i class="bi bi-plus-square me-1"></i>Project</span>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-retro" onclick="openUploadDocModal(${s.id}, '${fn:escapeXml(s.name)}')">
+                                                        <span><i class="bi bi-plus-circle me-1"></i>Doc</span>
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                         </c:if>
@@ -185,46 +220,6 @@
                                 </c:if>
                             </c:otherwise>
                         </c:choose>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Placements Section -->
-            <div id="placements" class="mb-5 reveal">
-                <div class="retro-window">
-                    <div class="retro-window-header">
-                        <span class="retro-window-title"><i class="bi bi-briefcase me-2"></i>Placement Telemetry</span>
-                        <div class="retro-window-dots">
-                            <span class="retro-window-dot close"></span>
-                            <span class="retro-window-dot minimize"></span>
-                            <span class="retro-window-dot maximize"></span>
-                        </div>
-                    </div>
-                    <div class="retro-window-body">
-                        <div class="admin-table-container">
-                            <table class="admin-table">
-                                <thead><tr><th>Student ID</th><th>Company</th><th>Role</th><th>Package</th><th>Status</th><th>Date</th></tr></thead>
-                                <tbody>
-                                    <c:forEach var="p" items="${placements}">
-                                        <tr>
-                                            <td style="font-family: 'JetBrains Mono', monospace;">#${p.studentId}</td>
-                                            <td style="font-weight: 600;">${p.company}</td>
-                                            <td>${p.role}</td>
-                                            <td style="color: var(--accent-green); font-weight: 700; font-family: 'JetBrains Mono', monospace;">${p.packageLpa} LPA</td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${p.status == 'placed'}"><span class="badge badge-placed">Placed</span></c:when>
-                                                    <c:when test="${p.status == 'interviewing'}"><span class="badge badge-interviewing">Interviewing</span></c:when>
-                                                    <c:when test="${p.status == 'offered'}"><span class="badge badge-offered">Offered</span></c:when>
-                                                    <c:otherwise><span class="badge">${p.status}</span></c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td style="font-family: 'JetBrains Mono', monospace;"><c:out value="${p.datePlaced}" default="--"/></td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -298,6 +293,98 @@
 
         </div>
     </div>
+
+    <!-- ============ BOOTSTRAP MODALS FOR DYNAMIC UPLOADS ============ -->
+    
+    <!-- 1. Add Project Modal -->
+    <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProjectModalLabel" style="font-family: 'Audiowide', sans-serif;">Add Project</h5>
+                    <button type="button" class="btn-close" data-bs-close="modal" aria-label="Close"></button>
+                </div>
+                <form action="${pageContext.request.contextPath}/admin" method="post">
+                    <div class="modal-body contact-form">
+                        <input type="hidden" name="action" value="addProject">
+                        <input type="hidden" id="projStudentId" name="studentId">
+                        
+                        <p class="mb-4 text-secondary">Assigning new project to <strong id="projStudentName" style="color: var(--accent-pink);">Student</strong></p>
+                        
+                        <div class="mb-3">
+                            <label for="projTitle" class="form-label">Project Title</label>
+                            <input type="text" class="form-control" id="projTitle" name="title" placeholder="E.g. AI Engine" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projDesc" class="form-label">Description</label>
+                            <textarea class="form-control" id="projDesc" name="description" rows="3" placeholder="Enter description..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projTech" class="form-label">Tech Stack</label>
+                            <input type="text" class="form-control" id="projTech" name="techStack" placeholder="E.g. React, Spring Boot, MySQL" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projGit" class="form-label">GitHub Repository URL</label>
+                            <input type="url" class="form-control" id="projGit" name="githubUrl" placeholder="https://github.com/..." required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-close="modal">Cancel</button>
+                        <button type="submit" class="btn-retro"><span>Save Project</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Upload Document Modal -->
+    <div class="modal fade" id="uploadDocModal" tabindex="-1" aria-labelledby="uploadDocModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadDocModalLabel" style="font-family: 'Audiowide', sans-serif;">Upload Document</h5>
+                    <button type="button" class="btn-close" data-bs-close="modal" aria-label="Close"></button>
+                </div>
+                <form action="${pageContext.request.contextPath}/admin" method="post">
+                    <div class="modal-body contact-form">
+                        <input type="hidden" name="action" value="uploadDocument">
+                        <input type="hidden" id="docStudentId" name="studentId">
+                        
+                        <p class="mb-4 text-secondary">Uploading file for <strong id="docStudentName" style="color: var(--accent-pink);">Student</strong></p>
+                        
+                        <div class="mb-3">
+                            <label for="docTitle" class="form-label">Document Title</label>
+                            <input type="text" class="form-control" id="docTitle" name="title" placeholder="E.g. Sem 5 Marksheet" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="docPath" class="form-label">File Reference Path</label>
+                            <input type="text" class="form-control" id="docPath" name="filePath" placeholder="E.g. docs/marksheet_5.pdf" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-close="modal">Cancel</button>
+                        <button type="submit" class="btn-retro"><span>Upload Document</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals Utility Scripts -->
+    <script>
+        function openAddProjectModal(studentId, studentName) {
+            document.getElementById('projStudentId').value = studentId;
+            document.getElementById('projStudentName').innerText = studentName;
+            const modal = new bootstrap.Modal(document.getElementById('addProjectModal'));
+            modal.show();
+        }
+        function openUploadDocModal(studentId, studentName) {
+            document.getElementById('docStudentId').value = studentId;
+            document.getElementById('docStudentName').innerText = studentName;
+            const modal = new bootstrap.Modal(document.getElementById('uploadDocModal'));
+            modal.show();
+        }
+    </script>
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

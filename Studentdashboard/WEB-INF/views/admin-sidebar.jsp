@@ -7,7 +7,6 @@
         <li><a href="${pageContext.request.contextPath}/admin" class="sidebar-link active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
         <li><a href="${pageContext.request.contextPath}/admin#students" class="sidebar-link"><i class="bi bi-people"></i> Students</a></li>
         <li><a href="${pageContext.request.contextPath}/admin#logs" class="sidebar-link"><i class="bi bi-clock-history"></i> Login Logs</a></li>
-        <li><a href="${pageContext.request.contextPath}/admin#placements" class="sidebar-link"><i class="bi bi-briefcase"></i> Placements</a></li>
         <li><a href="${pageContext.request.contextPath}/admin#attendance" class="sidebar-link"><i class="bi bi-calendar-check"></i> Attendance</a></li>
         <li><a href="${pageContext.request.contextPath}/admin#documents" class="sidebar-link"><i class="bi bi-file-earmark-text"></i> Documents</a></li>
         <li><a href="${pageContext.request.contextPath}/logout" class="sidebar-link logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>

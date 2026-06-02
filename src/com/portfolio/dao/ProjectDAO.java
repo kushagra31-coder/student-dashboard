@@ -80,6 +80,22 @@ public class ProjectDAO {
         return 0;
     }
 
+    public boolean addProject(int studentId, String title, String description, String techStack, String githubUrl) {
+        String sql = "INSERT INTO projects (student_id, title, description, tech_stack, github_url, live_demo_url, image_path) VALUES (?, ?, ?, ?, ?, '#', 'images/project1.jpg')";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, studentId);
+            ps.setString(2, title);
+            ps.setString(3, description);
+            ps.setString(4, techStack);
+            ps.setString(5, githubUrl);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     // ── Helper ─────────────────────────────────────────────────────────
 
     private Project mapRow(ResultSet rs) throws SQLException {

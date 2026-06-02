@@ -52,18 +52,13 @@
                         <i class="bi bi-house-door me-1"></i>Home
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link <c:if test='${currentPage == "students"}'>active</c:if>"
-                       href="${pageContext.request.contextPath}/students">
-                        <i class="bi bi-people me-1"></i>Students
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <c:if test='${currentPage == "projects"}'>active</c:if>"
-                       href="${pageContext.request.contextPath}/projects">
-                        <i class="bi bi-code-square me-1"></i>Projects
-                    </a>
-                </li>
+                <c:if test="${sessionScope.studentRole == 'admin'}">
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/admin">
+                            <i class="bi bi-speedometer2 me-1"></i>Admin Panel
+                        </a>
+                    </li>
+                </c:if>
                 <li class="nav-item">
                     <a class="nav-link <c:if test='${currentPage == "contact"}'>active</c:if>"
                        href="${pageContext.request.contextPath}/contact">
