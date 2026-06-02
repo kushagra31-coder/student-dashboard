@@ -12,382 +12,278 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Custom Style -->
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        .stat-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
-        .stat-overview .retro-window-body { padding: 1.5rem; text-align: center; }
-        .stat-overview .stat-icon { font-size: 2.2rem; margin-bottom: 0.5rem; text-shadow: 0 0 10px rgba(0,242,254,0.3); }
-        .stat-overview .stat-val { font-size: 2.5rem; font-weight: bold; font-family: 'JetBrains Mono', monospace; }
-        .stat-overview .stat-lbl { color: var(--text-muted); font-size: 0.85rem; font-family: 'Audiowide', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
-        .attendance-bar { height: 10px; border-radius: 2px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border); overflow: hidden; }
-        .attendance-bar-fill { height: 100%; border-radius: 1px; transition: width 0.6s ease; }
-        .attendance-good { background: linear-gradient(90deg, var(--accent-green), var(--accent-blue)); }
-        .attendance-warn { background: linear-gradient(90deg, var(--accent-orange), var(--accent-pink)); }
-        
-        /* Modal styling variables custom overrides to match our Vaporwave styles */
-        .modal-content {
-            background: #12052c !important;
-            border: 2px solid var(--accent-pink) !important;
-            box-shadow: 0 0 25px rgba(255, 0, 127, 0.4) !important;
-            border-radius: 8px !important;
-            color: #fff !important;
-        }
-        .modal-header {
-            background: rgba(255, 0, 127, 0.15) !important;
-            border-bottom: 2px solid var(--glass-border) !important;
-        }
-        .modal-footer {
-            border-top: 1px solid var(--glass-border) !important;
-        }
-        .modal-header .btn-close {
-            filter: invert(1) grayscale(1) brightness(2);
-        }
-        [data-theme='light'] .modal-content {
-            background: #fff2e6 !important;
-            border: 2px solid var(--accent-blue) !important;
-            box-shadow: 0 0 20px rgba(0, 143, 149, 0.2) !important;
-            color: var(--text-primary) !important;
-        }
-        [data-theme='light'] .modal-header {
-            background: rgba(0, 143, 149, 0.1) !important;
-            border-bottom: 2px solid var(--glass-border) !important;
-        }
-        [data-theme='light'] .modal-header .btn-close {
-            filter: none;
-        }
-    </style>
 </head>
 <body class="dashboard-body">
-    <!-- CRT Monitor Scanlines -->
+    <!-- CRT Overlay -->
     <div class="crt-overlay"></div>
-
-    <!-- Synthwave Grid Canvas -->
     <canvas id="particle-canvas"></canvas>
-    <jsp:include page="/WEB-INF/views/admin-sidebar.jsp" />
 
+    <!-- Sidebar (Using standard sidebar modified or keeping it simple for Admin) -->
+    <div class="sidebar glass-card">
+        <div class="sidebar-brand">
+            <span class="gradient-text">AdminPanel</span>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a href="${pageContext.request.contextPath}/admin" class="sidebar-link active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+            <li><a href="${pageContext.request.contextPath}/home" class="sidebar-link"><i class="bi bi-house"></i> Go to App</a></li>
+            <li><a href="${pageContext.request.contextPath}/logout" class="sidebar-link logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
     <div class="dashboard-main">
         <div class="container-fluid py-4 px-4">
-
-            <!-- Header -->
-            <div class="mb-4 reveal">
-                <h1 class="text-gradient" style="font-size: 2.2rem; display: inline-block;">Admin Dashboard</h1>
-                <p class="text-secondary" style="font-size: 1.15rem;">Manage students, track attendance, and monitor telemetry logs</p>
-            </div>
-
-            <!-- Flash Alert Messages -->
-            <c:if test="${not empty msg}">
-                <div class="alert-glass alert-glass-success mb-4 reveal">
-                    <i class="bi bi-check-circle-fill me-2"></i>${msg}
-                </div>
-            </c:if>
-            <c:if test="${not empty msgError}">
-                <div class="alert-glass alert-glass-error mb-4 reveal">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i>${msgError}
+            
+            <c:if test="${param.success == 'true'}">
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="background: rgba(40,167,69,0.2); color: #fff; border-color: #28a745;">
+                    Action completed successfully!
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </c:if>
 
-            <!-- Stats Overview -->
-            <div class="stat-overview reveal">
-                <div class="retro-window">
-                    <div class="retro-window-header">
-                        <span class="retro-window-title">Metric: STU</span>
-                        <div class="retro-window-dots"><span class="retro-window-dot close"></span></div>
-                    </div>
-                    <div class="retro-window-body">
-                        <div class="stat-icon" style="color: var(--accent-blue);"><i class="bi bi-people-fill"></i></div>
-                        <div class="stat-val text-gradient">${fn:length(students)}</div>
-                        <div class="stat-lbl">Students</div>
-                    </div>
+            <div class="retro-window mb-5">
+                <div class="retro-window-header">
+                    <span class="retro-window-title">Student Records & Management</span>
                 </div>
-                <div class="retro-window">
-                    <div class="retro-window-header">
-                        <span class="retro-window-title">Metric: LOG</span>
-                        <div class="retro-window-dots"><span class="retro-window-dot minimize"></span></div>
-                    </div>
-                    <div class="retro-window-body">
-                        <div class="stat-icon" style="color: var(--accent-pink);"><i class="bi bi-clock-history"></i></div>
-                        <div class="stat-val text-gradient">${fn:length(loginLogs)}</div>
-                        <div class="stat-lbl">Login Events</div>
-                    </div>
-                </div>
-                <div class="retro-window">
-                    <div class="retro-window-header">
-                        <span class="retro-window-title">Metric: DOC</span>
-                        <div class="retro-window-dots"><span class="retro-window-dot close"></span></div>
-                    </div>
-                    <div class="retro-window-body">
-                        <div class="stat-icon" style="color: var(--accent-orange);"><i class="bi bi-file-earmark-text-fill"></i></div>
-                        <div class="stat-val text-gradient">${fn:length(allDocuments)}</div>
-                        <div class="stat-lbl">Documents</div>
-                    </div>
-                </div>
-            </div>
+                <div class="retro-window-body p-4">
+                    <div class="accordion" id="studentAccordion">
+                        <c:forEach var="student" items="${students}">
+                            <div class="accordion-item glass-card mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border);">
+                                <h2 class="accordion-header" id="heading${student.id}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${student.id}" aria-expanded="false" aria-controls="collapse${student.id}" style="background: transparent; color: white; border: none;">
+                                        <strong class="text-gradient">${student.name}</strong> &nbsp;—&nbsp; ${student.branch} (Sem: ${student.semester})
+                                    </button>
+                                </h2>
+                                <div id="collapse${student.id}" class="accordion-collapse collapse" aria-labelledby="heading${student.id}" data-bs-parent="#studentAccordion">
+                                    <div class="accordion-body text-white">
+                                        <!-- Actions -->
+                                        <div class="d-flex gap-2 mb-4">
+                                            <button class="btn btn-sm btn-outline-info" onclick="openProjectModal(${student.id}, '${student.name}')"><i class="bi bi-plus-lg"></i> Add Project</button>
+                                            <button class="btn btn-sm btn-outline-success" onclick="openDocModal(${student.id}, '${student.name}')"><i class="bi bi-plus-lg"></i> Upload Document</button>
+                                            <button class="btn btn-sm btn-outline-warning" onclick="openCertModal(${student.id}, '${student.name}')"><i class="bi bi-plus-lg"></i> Add Certificate</button>
+                                        </div>
 
-            <!-- Students Section -->
-            <div id="students" class="mb-5 reveal">
-                <div class="retro-window">
-                    <div class="retro-window-header">
-                        <span class="retro-window-title"><i class="bi bi-people me-2"></i>Student Records</span>
-                        <div class="retro-window-dots">
-                            <span class="retro-window-dot close"></span>
-                            <span class="retro-window-dot minimize"></span>
-                            <span class="retro-window-dot maximize"></span>
-                        </div>
-                    </div>
-                    <div class="retro-window-body">
-                        <div class="admin-table-container">
-                            <table class="admin-table">
-                                <thead><tr><th>ID</th><th>Name</th><th>Branch</th><th>Semester</th><th>Role</th><th>Actions</th></tr></thead>
-                                <tbody>
-                                    <c:forEach var="s" items="${students}">
-                                        <c:if test="${s.role != 'admin'}">
-                                        <tr>
-                                            <td style="font-family: 'JetBrains Mono', monospace;">#${s.id}</td>
-                                            <td style="font-weight: 600;">${s.name}</td>
-                                            <td>${s.branch}</td>
-                                            <td style="font-family: 'JetBrains Mono', monospace;">Sem ${s.semester}</td>
-                                            <td><span class="badge" style="background: rgba(0, 242, 254, 0.1); color: var(--accent-blue); border: 1px solid var(--accent-blue);">${s.role}</span></td>
-                                            <td>
-                                                <div class="d-flex gap-2">
-                                                    <button class="btn btn-sm btn-retro btn-retro-cyan" onclick="openAddProjectModal(${s.id}, '${fn:escapeXml(s.name)}')">
-                                                        <span><i class="bi bi-plus-square me-1"></i>Project</span>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-retro" onclick="openUploadDocModal(${s.id}, '${fn:escapeXml(s.name)}')">
-                                                        <span><i class="bi bi-plus-circle me-1"></i>Doc</span>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        </c:if>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                        <div class="row g-3">
+                                            <!-- Projects -->
+                                            <div class="col-md-4">
+                                                <h6 class="text-info border-bottom pb-2">Projects</h6>
+                                                <ul class="list-unstyled">
+                                                    <c:forEach var="p" items="${studentProjects[student.id]}">
+                                                        <li>- <c:out value="${p.title}"/></li>
+                                                    </c:forEach>
+                                                    <c:if test="${empty studentProjects[student.id]}"><li><small class="text-muted">No projects</small></li></c:if>
+                                                </ul>
+                                            </div>
+                                            <!-- Documents -->
+                                            <div class="col-md-4">
+                                                <h6 class="text-success border-bottom pb-2">Documents</h6>
+                                                <ul class="list-unstyled">
+                                                    <c:forEach var="d" items="${studentDocuments[student.id]}">
+                                                        <li>- <c:out value="${d.title}"/></li>
+                                                    </c:forEach>
+                                                    <c:if test="${empty studentDocuments[student.id]}"><li><small class="text-muted">No documents</small></li></c:if>
+                                                </ul>
+                                            </div>
+                                            <!-- Certificates -->
+                                            <div class="col-md-4">
+                                                <h6 class="text-warning border-bottom pb-2">Certificates</h6>
+                                                <ul class="list-unstyled">
+                                                    <c:forEach var="c" items="${studentCertificates[student.id]}">
+                                                        <li>- <c:out value="${c.title}"/></li>
+                                                    </c:forEach>
+                                                    <c:if test="${empty studentCertificates[student.id]}"><li><small class="text-muted">No certificates</small></li></c:if>
+                                                </ul>
+                                            </div>
+                                        </div>
 
-            <!-- Login Logs Section -->
-            <div id="logs" class="mb-5 reveal">
-                <div class="retro-window">
-                    <div class="retro-window-header">
-                        <span class="retro-window-title"><i class="bi bi-clock-history me-2"></i>Login Activity Logs</span>
-                        <div class="retro-window-dots">
-                            <span class="retro-window-dot close"></span>
-                            <span class="retro-window-dot minimize"></span>
-                            <span class="retro-window-dot maximize"></span>
-                        </div>
-                    </div>
-                    <div class="retro-window-body">
-                        <c:choose>
-                            <c:when test="${empty loginLogs}">
-                                <p class="text-secondary text-center py-4">No login activity telemetry recorded yet.</p>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="admin-table-container">
-                                    <table class="admin-table">
-                                        <thead><tr><th>User (ID)</th><th>Role</th><th>Login Timestamp</th></tr></thead>
-                                        <tbody>
-                                            <c:forEach var="log" items="${loginLogs}" begin="0" end="4">
-                                                <tr>
-                                                    <td>${log.userName} <span class="text-muted" style="font-family: 'JetBrains Mono', monospace;">(ID: ${log.userId})</span></td>
-                                                    <td><span class="badge" style="background: rgba(255, 0, 127, 0.1); color: var(--accent-pink); border: 1px solid var(--accent-pink);">${log.role}</span></td>
-                                                    <td style="font-family: 'JetBrains Mono', monospace;">${log.loginTime}</td>
-                                                </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                        <c:if test="${fn:length(loginLogs) > 5}">
-                                            <tbody class="collapse" id="olderLogs">
-                                                <c:forEach var="log" items="${loginLogs}" begin="5">
+                                        <!-- Attendance Mini Table -->
+                                        <div class="mt-4">
+                                            <h6 class="text-secondary border-bottom pb-2">Attendance Info</h6>
+                                            <table class="table table-dark table-sm table-hover mt-2" style="background: transparent;">
+                                                <thead>
                                                     <tr>
-                                                        <td>${log.userName} <span class="text-muted" style="font-family: 'JetBrains Mono', monospace;">(ID: ${log.userId})</span></td>
-                                                        <td><span class="badge" style="background: rgba(255, 0, 127, 0.1); color: var(--accent-pink); border: 1px solid var(--accent-pink);">${log.role}</span></td>
-                                                        <td style="font-family: 'JetBrains Mono', monospace;">${log.loginTime}</td>
+                                                        <th>Subject</th>
+                                                        <th>Total</th>
+                                                        <th>Attended</th>
+                                                        <th>%</th>
                                                     </tr>
-                                                </c:forEach>
-                                            </tbody>
-                                        </c:if>
-                                    </table>
-                                </div>
-                                <c:if test="${fn:length(loginLogs) > 5}">
-                                    <div class="text-center mt-3">
-                                        <button class="btn-retro btn-retro-cyan btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#olderLogs" aria-expanded="false">
-                                            <span>Show Older Logs</span>
-                                        </button>
+                                                </thead>
+                                                <tbody>
+                                                    <c:set var="hasAtt" value="false" />
+                                                    <c:forEach var="att" items="${attendanceList}">
+                                                        <c:if test="${att.studentId == student.id}">
+                                                            <c:set var="hasAtt" value="true" />
+                                                            <tr>
+                                                                <td>${att.subject}</td>
+                                                                <td>${att.totalClasses}</td>
+                                                                <td>${att.attended}</td>
+                                                                <td>${att.percentage}%</td>
+                                                            </tr>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                    <c:if test="${!hasAtt}">
+                                                        <tr><td colspan="4" class="text-center text-muted">No attendance data</td></tr>
+                                                    </c:if>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </c:if>
-                            </c:otherwise>
-                        </c:choose>
+                                </div>
+                            </div>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
 
-            <!-- Attendance Section -->
-            <div id="attendance" class="mb-5 reveal">
-                <div class="retro-window">
-                    <div class="retro-window-header">
-                        <span class="retro-window-title"><i class="bi bi-calendar-check me-2"></i>Attendance Tracking</span>
-                        <div class="retro-window-dots">
-                            <span class="retro-window-dot close"></span>
-                            <span class="retro-window-dot minimize"></span>
-                            <span class="retro-window-dot maximize"></span>
-                        </div>
-                    </div>
-                    <div class="retro-window-body">
-                        <div class="admin-table-container">
-                            <table class="admin-table">
-                                <thead><tr><th>Student ID</th><th>Subject</th><th>Attended / Total</th><th>Percentage</th><th>Progress</th></tr></thead>
-                                <tbody>
-                                    <c:forEach var="a" items="${attendanceList}">
-                                        <tr>
-                                            <td style="font-family: 'JetBrains Mono', monospace;">#${a.studentId}</td>
-                                            <td style="font-weight: 600;">${a.subject}</td>
-                                            <td style="font-family: 'JetBrains Mono', monospace;">${a.attended} / ${a.totalClasses}</td>
-                                            <td style="font-weight: bold; font-family: 'JetBrains Mono', monospace; color: ${a.percentage >= 75 ? 'var(--accent-green)' : 'var(--accent-pink)'};">${a.percentage}%</td>
-                                            <td style="min-width: 150px;">
-                                                <div class="attendance-bar">
-                                                    <div class="attendance-bar-fill ${a.percentage >= 75 ? 'attendance-good' : 'attendance-warn'}" style="width: ${a.percentage}%;"></div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Documents Section -->
-            <div id="documents" class="mb-5 reveal">
-                <div class="retro-window">
-                    <div class="retro-window-header">
-                        <span class="retro-window-title"><i class="bi bi-file-earmark-text me-2"></i>Global Documents Index</span>
-                        <div class="retro-window-dots">
-                            <span class="retro-window-dot close"></span>
-                            <span class="retro-window-dot minimize"></span>
-                            <span class="retro-window-dot maximize"></span>
-                        </div>
-                    </div>
-                    <div class="retro-window-body">
-                        <div class="admin-table-container">
-                            <table class="admin-table">
-                                <thead><tr><th>Student ID</th><th>Document Title</th><th>File Reference Path</th><th>Upload Date</th></tr></thead>
-                                <tbody>
-                                    <c:forEach var="doc" items="${allDocuments}">
-                                        <tr>
-                                            <td style="font-family: 'JetBrains Mono', monospace;">#${doc.studentId}</td>
-                                            <td style="font-weight: 600;"><i class="bi bi-file-pdf me-2" style="color: var(--accent-pink);"></i>${doc.title}</td>
-                                            <td style="font-family: 'JetBrains Mono', monospace; color: var(--accent-blue); font-size: 0.85rem;">${doc.filePath}</td>
-                                            <td style="font-family: 'JetBrains Mono', monospace;">${doc.uploadDate}</td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+            <!-- Login Logs -->
+            <div class="retro-window">
+                <div class="retro-window-header"><span class="retro-window-title">System Login Logs</span></div>
+                <div class="retro-window-body p-3" style="max-height: 400px; overflow-y: auto;">
+                    <table class="table table-dark table-hover table-bordered mb-0">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th>Time</th>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>IP Address</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="log" items="${loginLogs}">
+                                <tr>
+                                    <td><c:out value="${log.loginTime}"/></td>
+                                    <td><c:out value="${log.userName}"/></td>
+                                    <td><span class="badge ${log.role == 'admin' ? 'bg-danger' : 'bg-primary'}"><c:out value="${log.role}"/></span></td>
+                                    <td><c:out value="${log.ipAddress}"/></td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <!-- ============ BOOTSTRAP MODALS FOR DYNAMIC UPLOADS ============ -->
-    
-    <!-- 1. Add Project Modal -->
-    <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addProjectModalLabel" style="font-family: 'Audiowide', sans-serif;">Add Project</h5>
-                    <button type="button" class="btn-close" data-bs-close="modal" aria-label="Close"></button>
-                </div>
+    <!-- Add Project Modal -->
+    <div class="modal fade" id="addProjectModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered text-white">
+            <div class="modal-content glass-card" style="background: rgba(20,20,40,0.9);">
                 <form action="${pageContext.request.contextPath}/admin" method="post">
-                    <div class="modal-body contact-form">
-                        <input type="hidden" name="action" value="addProject">
-                        <input type="hidden" id="projStudentId" name="studentId">
-                        
-                        <p class="mb-4 text-secondary">Assigning new project to <strong id="projStudentName" style="color: var(--accent-pink);">Student</strong></p>
-                        
+                    <input type="hidden" name="action" value="addProject">
+                    <input type="hidden" name="studentId" id="projStudentId">
+                    <div class="modal-header border-bottom border-secondary">
+                        <h5 class="modal-title text-info">Add Project for <span id="projStudentName"></span></h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label for="projTitle" class="form-label">Project Title</label>
-                            <input type="text" class="form-control" id="projTitle" name="title" placeholder="E.g. AI Engine" required>
+                            <label>Title</label>
+                            <input type="text" name="title" class="form-control bg-dark text-white border-secondary" required>
                         </div>
                         <div class="mb-3">
-                            <label for="projDesc" class="form-label">Description</label>
-                            <textarea class="form-control" id="projDesc" name="description" rows="3" placeholder="Enter description..." required></textarea>
+                            <label>Description</label>
+                            <textarea name="description" class="form-control bg-dark text-white border-secondary" rows="2"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="projTech" class="form-label">Tech Stack</label>
-                            <input type="text" class="form-control" id="projTech" name="techStack" placeholder="E.g. React, Spring Boot, MySQL" required>
+                            <label>Tech Stack</label>
+                            <input type="text" name="techStack" class="form-control bg-dark text-white border-secondary">
                         </div>
                         <div class="mb-3">
-                            <label for="projGit" class="form-label">GitHub Repository URL</label>
-                            <input type="url" class="form-control" id="projGit" name="githubUrl" placeholder="https://github.com/..." required>
+                            <label>GitHub URL</label>
+                            <input type="url" name="githubUrl" class="form-control bg-dark text-white border-secondary">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-close="modal">Cancel</button>
-                        <button type="submit" class="btn-retro"><span>Save Project</span></button>
+                    <div class="modal-footer border-top border-secondary">
+                        <button type="submit" class="btn btn-outline-info">Add Project</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- 2. Upload Document Modal -->
-    <div class="modal fade" id="uploadDocModal" tabindex="-1" aria-labelledby="uploadDocModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="uploadDocModalLabel" style="font-family: 'Audiowide', sans-serif;">Upload Document</h5>
-                    <button type="button" class="btn-close" data-bs-close="modal" aria-label="Close"></button>
-                </div>
+    <!-- Upload Document Modal -->
+    <div class="modal fade" id="uploadDocModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered text-white">
+            <div class="modal-content glass-card" style="background: rgba(20,20,40,0.9);">
                 <form action="${pageContext.request.contextPath}/admin" method="post">
-                    <div class="modal-body contact-form">
-                        <input type="hidden" name="action" value="uploadDocument">
-                        <input type="hidden" id="docStudentId" name="studentId">
-                        
-                        <p class="mb-4 text-secondary">Uploading file for <strong id="docStudentName" style="color: var(--accent-pink);">Student</strong></p>
-                        
+                    <input type="hidden" name="action" value="uploadDocument">
+                    <input type="hidden" name="studentId" id="docStudentId">
+                    <div class="modal-header border-bottom border-secondary">
+                        <h5 class="modal-title text-success">Upload Doc for <span id="docStudentName"></span></h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label for="docTitle" class="form-label">Document Title</label>
-                            <input type="text" class="form-control" id="docTitle" name="title" placeholder="E.g. Sem 5 Marksheet" required>
+                            <label>Title (e.g. 10th Marksheet)</label>
+                            <input type="text" name="title" class="form-control bg-dark text-white border-secondary" required>
                         </div>
                         <div class="mb-3">
-                            <label for="docPath" class="form-label">File Reference Path</label>
-                            <input type="text" class="form-control" id="docPath" name="filePath" placeholder="E.g. docs/marksheet_5.pdf" required>
+                            <label>File Path (e.g. documents/10th.pdf)</label>
+                            <input type="text" name="filePath" class="form-control bg-dark text-white border-secondary" required>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-close="modal">Cancel</button>
-                        <button type="submit" class="btn-retro"><span>Upload Document</span></button>
+                    <div class="modal-footer border-top border-secondary">
+                        <button type="submit" class="btn btn-outline-success">Upload Document</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Modals Utility Scripts -->
-    <script>
-        function openAddProjectModal(studentId, studentName) {
-            document.getElementById('projStudentId').value = studentId;
-            document.getElementById('projStudentName').innerText = studentName;
-            const modal = new bootstrap.Modal(document.getElementById('addProjectModal'));
-            modal.show();
-        }
-        function openUploadDocModal(studentId, studentName) {
-            document.getElementById('docStudentId').value = studentId;
-            document.getElementById('docStudentName').innerText = studentName;
-            const modal = new bootstrap.Modal(document.getElementById('uploadDocModal'));
-            modal.show();
-        }
-    </script>
+    <!-- Add Certificate Modal -->
+    <div class="modal fade" id="addCertModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered text-white">
+            <div class="modal-content glass-card" style="background: rgba(20,20,40,0.9);">
+                <form action="${pageContext.request.contextPath}/admin" method="post">
+                    <input type="hidden" name="action" value="addCertificate">
+                    <input type="hidden" name="studentId" id="certStudentId">
+                    <div class="modal-header border-bottom border-secondary">
+                        <h5 class="modal-title text-warning">Add Certificate for <span id="certStudentName"></span></h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label>Title (e.g. AWS Certified)</label>
+                            <input type="text" name="title" class="form-control bg-dark text-white border-secondary" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>File Path</label>
+                            <input type="text" name="filePath" class="form-control bg-dark text-white border-secondary" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top border-secondary">
+                        <button type="submit" class="btn btn-outline-warning">Add Certificate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        function openProjectModal(id, name) {
+            document.getElementById('projStudentId').value = id;
+            document.getElementById('projStudentName').innerText = name;
+            new bootstrap.Modal(document.getElementById('addProjectModal')).show();
+        }
+        function openDocModal(id, name) {
+            document.getElementById('docStudentId').value = id;
+            document.getElementById('docStudentName').innerText = name;
+            new bootstrap.Modal(document.getElementById('uploadDocModal')).show();
+        }
+        function openCertModal(id, name) {
+            document.getElementById('certStudentId').value = id;
+            document.getElementById('certStudentName').innerText = name;
+            new bootstrap.Modal(document.getElementById('addCertModal')).show();
+        }
+    </script>
 </body>
 </html>

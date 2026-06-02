@@ -67,21 +67,20 @@ public class DocumentDAO {
         return documents;
     }
 
-    public boolean addDocument(int studentId, String title, String filePath) {
-        String sql = "INSERT INTO documents (student_id, title, file_path, upload_date) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
+    // ── Helper ─────────────────────────────────────────────────────────
+
+    public void addDocument(int studentId, String title, String filePath) {
+        String sql = "INSERT INTO documents (student_id, title, file_path) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, studentId);
             ps.setString(2, title);
             ps.setString(3, filePath);
-            return ps.executeUpdate() > 0;
+            ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
-
-    // ── Helper ─────────────────────────────────────────────────────────
 
     private Document mapRow(ResultSet rs) throws SQLException {
         Document d = new Document();

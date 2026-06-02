@@ -148,6 +148,28 @@
                                     </div>
                                 </div>
                             </c:forEach>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certificates Grid -->
+            <div class="reveal mb-5">
+                <div class="retro-window">
+                    <div class="retro-window-header">
+                        <span class="retro-window-title">Certifications & Credentials</span>
+                        <div class="retro-window-dots"><span class="retro-window-dot close"></span></div>
+                    </div>
+                    <div class="retro-window-body">
+                        <h4 class="mb-4 text-gradient">Certificates</h4>
+                        <div class="row g-4">
+                            <c:forEach var="cert" items="${certificates}">
+                                <div class="col-md-4">
+                                    <div class="glass-card p-4 achievement-card glow-cyan">
+                                        <h5 class="text-gradient"><i class="bi bi-award me-2"></i><c:out value="${cert.title}"/></h5>
+                                        <p class="text-secondary text-sm mb-0">Issued: <c:out value="${cert.issueDate}"/></p>
+                                    </div>
+                                </div>
+                            </c:forEach>
                         </div>
                     </div>
                 </div>

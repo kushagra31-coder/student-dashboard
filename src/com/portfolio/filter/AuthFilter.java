@@ -40,7 +40,7 @@ public class AuthFilter implements Filter {
                 return;
             }
 
-            // Extra check: only admins may access /admin, /students, and /projects
+            // Extra check: only admins may access /admin, /students, /projects
             if (path.equals("/admin") || path.equals("/students") || path.equals("/projects")) {
                 String role = (String) session.getAttribute("studentRole");
                 if (!"admin".equals(role)) {
