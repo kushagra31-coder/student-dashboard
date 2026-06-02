@@ -17,13 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        // Once animated, stop observing for performance
         animationObserver.unobserve(entry.target);
       }
     });
   }, observerOptions);
 
-  // Observe all animation-trigger elements
   document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right, .reveal').forEach(el => {
     animationObserver.observe(el);
   });
@@ -37,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const fill = entry.target.querySelector('.skill-bar-fill');
         if (fill) {
           const target = fill.getAttribute('data-width') || '0';
-          // Small delay so the animation is visible
           setTimeout(() => {
             fill.style.width = target + '%';
             fill.classList.add('filled');
@@ -58,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const navbar = document.querySelector('.nav-glass');
 
   if (navbar) {
-    // Add "scrolled" class when page is scrolled
     const handleNavScroll = () => {
       if (window.scrollY > 50) {
         navbar.classList.add('scrolled');
@@ -67,9 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
     window.addEventListener('scroll', handleNavScroll, { passive: true });
-    handleNavScroll(); // run on load
+    handleNavScroll();
 
-    // Active link highlighting
     const currentPath = window.location.pathname;
     navbar.querySelectorAll('.nav-link').forEach(link => {
       const href = link.getAttribute('href');
@@ -139,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function showFeedback(type, message) {
-    // Remove existing feedback
     const existing = document.querySelector('.ajax-feedback');
     if (existing) existing.remove();
 
@@ -153,7 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('contactForm');
     if (form) {
       form.parentNode.insertBefore(div, form);
-      // Auto-remove after 6 seconds
       setTimeout(() => {
         div.style.opacity = '0';
         div.style.transform = 'translateY(-10px)';
@@ -195,242 +188,172 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (!isDeleting && charIndex === current.length) {
-        typeSpeed = 2000; // Pause at end
+        typeSpeed = 2000;
         isDeleting = true;
       } else if (isDeleting && charIndex === 0) {
         isDeleting = false;
         phraseIndex = (phraseIndex + 1) % phrases.length;
-        typeSpeed = 500; // Pause before next phrase
+        typeSpeed = 500;
       }
 
       setTimeout(typeLoop, typeSpeed);
     }
 
-    // Start after a short delay
     setTimeout(typeLoop, 800);
   }
 
   /* ------------------------------------------
-     7. EPIC SPACE BACKGROUND
+     7. VAPORWAVE RETRO PERSPECTIVE GRID CANVAS
      ------------------------------------------ */
   const canvas = document.getElementById('particle-canvas');
   if (canvas) {
     const ctx = canvas.getContext('2d');
     let width, height;
-    
-    // Elements
-    let stars = [];
-    let planets = [];
-    let shootingStars = [];
-    let angle = 0; // For rotation
+    let gridOffset = 0;
+    const speed = 0.035; // scrolling velocity
 
     function resizeCanvas() {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     }
 
-    class Star {
-      constructor() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.r = Math.random() * 1.5;
-        this.alpha = Math.random();
-        this.fade = (Math.random() * 0.02) + 0.005;
-      }
-      update() {
-        this.alpha += this.fade;
-        if (this.alpha >= 1 || this.alpha <= 0.1) this.fade *= -1;
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
-        ctx.fill();
-      }
-    }
-
-    class Planet {
-      constructor(dist, radius, speed, color) {
-        this.dist = dist;
-        this.radius = radius;
-        this.speed = speed;
-        this.color = color;
-        this.angle = Math.random() * Math.PI * 2;
-      }
-      update() {
-        this.angle += this.speed;
-      }
-      draw(cx, cy) {
-        const x = cx + Math.cos(this.angle) * this.dist;
-        const y = cy + Math.sin(this.angle) * this.dist;
-        ctx.beginPath();
-        ctx.arc(x, y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = this.color;
-        ctx.fill();
-        ctx.shadowBlur = 0; // reset
-      }
-    }
-
-    class ShootingStar {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * width;
-        this.y = -50;
-        this.len = Math.random() * 80 + 30;
-        this.speed = Math.random() * 10 + 5;
-        this.active = false;
-        this.wait = Math.random() * 500 + 100; // frames to wait
-      }
-      update() {
-        if (!this.active) {
-          this.wait--;
-          if (this.wait <= 0) this.active = true;
-          return;
-        }
-        this.x -= this.speed;
-        this.y += this.speed;
-        if (this.x < 0 || this.y > height) this.reset();
-      }
-      draw() {
-        if (!this.active) return;
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y);
-        ctx.lineTo(this.x + this.len, this.y - this.len);
-        const grad = ctx.createLinearGradient(this.x, this.y, this.x + this.len, this.y - this.len);
-        grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      }
-    }
-
-    function initSpace() {
-      stars = Array.from({ length: 250 }, () => new Star());
-      planets = [
-        new Planet(80, 4, 0.01, '#00d4ff'),
-        new Planet(140, 8, 0.005, '#fb923c'),
-        new Planet(220, 12, 0.002, '#34d399'),
-        new Planet(300, 6, 0.003, '#f472b6')
-      ];
-      shootingStars = Array.from({ length: 3 }, () => new ShootingStar());
-    }
-
-    function drawNebula() {
-      // Pink/Purple Nebula
-      const g1 = ctx.createRadialGradient(width * 0.8, height * 0.2, 0, width * 0.8, height * 0.2, 500);
-      g1.addColorStop(0, 'rgba(124, 58, 237, 0.15)');
-      g1.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      ctx.fillStyle = g1;
-      ctx.fillRect(0, 0, width, height);
-
-      // Blue Nebula
-      const g2 = ctx.createRadialGradient(width * 0.2, height * 0.8, 0, width * 0.2, height * 0.8, 400);
-      g2.addColorStop(0, 'rgba(0, 212, 255, 0.1)');
-      g2.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      ctx.fillStyle = g2;
-      ctx.fillRect(0, 0, width, height);
-    }
-
-    function drawBlackHole() {
-      const bhX = width * 0.85;
-      const bhY = height * 0.8;
-      
-      // Accretion disk
+    function drawSun(cx, cy, r, isLight) {
       ctx.save();
-      ctx.translate(bhX, bhY);
-      ctx.rotate(angle * 2);
-      ctx.scale(1, 0.3); // squash to make it look 3D
-      
-      const grad = ctx.createRadialGradient(0, 0, 40, 0, 0, 150);
-      grad.addColorStop(0, 'rgba(0, 0, 0, 1)');
-      grad.addColorStop(0.3, 'rgba(124, 58, 237, 0.8)');
-      grad.addColorStop(0.6, 'rgba(0, 212, 255, 0.4)');
-      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      
+      // Draw Radial Sun Glow
+      const glow = ctx.createRadialGradient(cx, cy, r * 0.1, cx, cy, r * 2.0);
+      if (!isLight) {
+        glow.addColorStop(0, 'rgba(255, 0, 127, 0.45)');
+        glow.addColorStop(0.3, 'rgba(157, 78, 221, 0.2)');
+        glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      } else {
+        glow.addColorStop(0, 'rgba(255, 124, 0, 0.25)');
+        glow.addColorStop(0.4, 'rgba(255, 77, 128, 0.08)');
+        glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      }
       ctx.beginPath();
-      ctx.arc(0, 0, 150, 0, Math.PI * 2);
-      ctx.fillStyle = grad;
-      ctx.fill();
-      ctx.restore();
-
-      // The hole itself
-      ctx.beginPath();
-      ctx.arc(bhX, bhY, 35, 0, Math.PI * 2);
-      ctx.fillStyle = '#000';
-      ctx.shadowBlur = 30;
-      ctx.shadowColor = '#7c3aed';
-      ctx.fill();
-      ctx.shadowBlur = 0;
-    }
-
-    function drawSolarSystem() {
-      const sunX = width * 0.15;
-      const sunY = height * 0.25;
-
-      // Sun Glow
-      const glow = ctx.createRadialGradient(sunX, sunY, 20, sunX, sunY, 150);
-      glow.addColorStop(0, 'rgba(251, 146, 60, 1)');
-      glow.addColorStop(0.2, 'rgba(251, 146, 60, 0.4)');
-      glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      ctx.beginPath();
-      ctx.arc(sunX, sunY, 150, 0, Math.PI * 2);
+      ctx.arc(cx, cy, r * 2.0, 0, Math.PI * 2);
       ctx.fillStyle = glow;
       ctx.fill();
 
-      // Sun core
-      ctx.beginPath();
-      ctx.arc(sunX, sunY, 25, 0, Math.PI * 2);
-      ctx.fillStyle = '#fffbeb';
-      ctx.shadowBlur = 40;
-      ctx.shadowColor = '#fb923c';
-      ctx.fill();
-      ctx.shadowBlur = 0;
+      // Sun Gradient (Sunset blend)
+      const sunGrad = ctx.createLinearGradient(cx, cy - r, cx, cy + r);
+      if (!isLight) {
+        sunGrad.addColorStop(0, '#ffbd00');   // Sunset Yellow
+        sunGrad.addColorStop(0.4, '#ff007f'); // Hot pink
+        sunGrad.addColorStop(1, '#12052c');   // Merge into background deep purple
+      } else {
+        sunGrad.addColorStop(0, '#ff9e00');   // Neon Orange
+        sunGrad.addColorStop(0.6, '#ff4d80'); // Coral Pink
+        sunGrad.addColorStop(1, '#ffe6f2');   // Light background pink
+      }
 
-      // Planets
-      planets.forEach(p => p.draw(sunX, sunY));
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fillStyle = sunGrad;
+      ctx.fill();
+
+      // Sun horizontal grid slices/stripes
+      ctx.fillStyle = isLight ? '#ffe6f2' : '#09021a'; // Match background top-layer colors
+      
+      const numStripes = 7;
+      for (let i = 0; i < numStripes; i++) {
+        // Stripe vertical positions get thicker towards the bottom of the sun
+        const stripeHeight = 2.5 + (i * 2.5);
+        const stripeY = cy + (r * 0.15) + (i * (r * 0.11));
+        
+        if (stripeY < cy + r) {
+          ctx.fillRect(cx - r - 10, stripeY, r * 2 + 20, stripeHeight);
+        }
+      }
+      ctx.restore();
+    }
+
+    function drawGrid(horizon, isLight) {
+      ctx.save();
+      
+      const gridColor = isLight ? 'rgba(0, 143, 149, 0.25)' : 'rgba(255, 0, 127, 0.35)';
+      const horizonGlow = isLight ? 'rgba(0, 143, 149, 0.05)' : 'rgba(0, 242, 254, 0.12)';
+      
+      ctx.strokeStyle = gridColor;
+      ctx.lineWidth = 1.5;
+
+      const vanishingX = width / 2;
+      const numRadials = 26;
+
+      // 1. Perspective Radial Grid lines
+      for (let i = -numRadials / 2; i <= numRadials / 2; i++) {
+        const endX = vanishingX + (i * (width / 11));
+        ctx.beginPath();
+        ctx.moveTo(vanishingX, horizon);
+        ctx.lineTo(endX, height);
+        ctx.stroke();
+      }
+
+      // 2. Transverse scroll lines (depth-scaled using exponential curves)
+      const numHorizontals = 11;
+      for (let i = 0; i < numHorizontals; i++) {
+        const ratio = (i + gridOffset) / numHorizontals;
+        const lineY = horizon + Math.pow(ratio, 2.5) * (height - horizon);
+        
+        ctx.beginPath();
+        ctx.moveTo(0, lineY);
+        ctx.lineTo(width, lineY);
+        ctx.stroke();
+      }
+
+      // 3. Horizon separator line
+      ctx.strokeStyle = isLight ? 'rgba(0, 143, 149, 0.5)' : 'rgba(0, 242, 254, 0.6)';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(0, horizon);
+      ctx.lineTo(width, horizon);
+      ctx.stroke();
+
+      // Horizon Glow
+      const horizonGrad = ctx.createLinearGradient(0, horizon, 0, height);
+      horizonGrad.addColorStop(0, horizonGlow);
+      horizonGrad.addColorStop(0.35, 'rgba(0,0,0,0)');
+      ctx.fillStyle = horizonGrad;
+      ctx.fillRect(0, horizon, width, height);
+
+      ctx.restore();
     }
 
     function animate() {
-      // Clear with slight trailing effect if we wanted it, but let's clear full
       ctx.clearRect(0, 0, width, height);
 
-      // Light mode uses a different base, so we check if dark mode
       const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-      if (!isLight) {
-          drawNebula();
-          stars.forEach(s => { s.update(); s.draw(); });
-          drawBlackHole();
-          drawSolarSystem();
-          shootingStars.forEach(s => { s.update(); s.draw(); });
-      } else {
-          // Subtle day stars or clear sky
-          ctx.fillStyle = 'rgba(240, 244, 248, 0.5)';
-          ctx.fillRect(0, 0, width, height);
-      }
+      const horizon = height * 0.55;
+      
+      const sunR = Math.min(width, height) * 0.18;
+      const sunX = width / 2;
+      const sunY = horizon - 20;
+      
+      // Draw Sunset
+      drawSun(sunX, sunY, sunR, isLight);
+      
+      // Draw grid perspective
+      drawGrid(horizon, isLight);
 
-      angle += 0.005;
-      planets.forEach(p => p.update());
+      // Increment scroll animation
+      gridOffset += speed;
+      if (gridOffset >= 1) {
+        gridOffset = 0;
+      }
 
       requestAnimationFrame(animate);
     }
 
     resizeCanvas();
-    initSpace();
     animate();
 
     window.addEventListener('resize', () => {
       resizeCanvas();
-      initSpace();
     });
   }
 
   /* ------------------------------------------
-     11. THEME TOGGLE (DARK/LIGHT)
+     8. THEME TOGGLE (DARK/LIGHT)
      ------------------------------------------ */
   const themeToggle = document.getElementById('theme-toggle');
   if (themeToggle) {
@@ -450,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateToggleIcon(theme) {
       const btn = document.getElementById('theme-toggle');
       if (!btn) return;
-      const iconStr = theme === 'dark' ? '<i class="bi bi-sun-fill" style="color:#fb923c; margin-right: 8px;"></i>' : '<i class="bi bi-moon-fill" style="color:#1a0a2e; margin-right: 8px;"></i>';
+      const iconStr = theme === 'dark' ? '<i class="bi bi-sun-fill" style="color:#ff9e00; margin-right: 8px;"></i>' : '<i class="bi bi-moon-fill" style="color:#7a00ff; margin-right: 8px;"></i>';
       const textStr = theme === 'dark' ? 'Light Mode' : 'Dark Mode';
       
       const textSpan = document.getElementById('theme-text');
@@ -462,7 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ------------------------------------------
-     12. PASSWORD VISIBILITY TOGGLE
+     9. PASSWORD VISIBILITY TOGGLE
      ------------------------------------------ */
   const pwdToggle = document.getElementById('pwd-toggle');
   const pwdInput = document.querySelector('input[name="password"]');
@@ -475,13 +398,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ------------------------------------------
-     8. PROJECT FILTER (projects page)
+     10. PROJECT FILTER (projects page)
      ------------------------------------------ */
   const filterBtns = document.querySelectorAll('.filter-btn');
   if (filterBtns.length > 0) {
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        // Update active state
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
@@ -491,7 +413,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cards.forEach(card => {
           if (filter === 'all' || card.getAttribute('data-category') === filter) {
             card.style.display = '';
-            // Re-trigger animation
             setTimeout(() => card.querySelector('.fade-in-up')?.classList.add('visible'), 50);
           } else {
             card.style.display = 'none';
@@ -502,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ------------------------------------------
-     9. BOOTSTRAP NAVBAR COLLAPSE — Auto-close on link click (mobile)
+     11. BOOTSTRAP NAVBAR COLLAPSE — Auto-close on link click (mobile)
      ------------------------------------------ */
   const navCollapse = document.querySelector('.navbar-collapse');
   if (navCollapse) {
@@ -517,7 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ------------------------------------------
-     10. COUNT-UP ANIMATION — Dashboard Stats
+     12. COUNT-UP ANIMATION — Dashboard Stats
      ------------------------------------------ */
   const statNumbers = document.querySelectorAll('.stat-number');
   if (statNumbers.length > 0) {
@@ -529,14 +450,10 @@ document.addEventListener('DOMContentLoaded', () => {
           let current = 0;
           
           if (target > 0) {
-            const duration = 2000; // 2 seconds
+            const duration = 2000;
             const stepTime = Math.max(10, Math.floor(duration / target));
-            // Using max(10) so it doesn't go too fast for large numbers
             
-            // To ensure it always hits exactly 'duration', adjust steps:
-            // But simple increment is fine for small numbers like 5, 8, 12, 6.
             const timer = setInterval(() => {
-              // Increase by a proportional amount if target is very large, but our targets are small
               let increment = Math.ceil(target / (duration / stepTime));
               current += increment;
               if (current >= target) {

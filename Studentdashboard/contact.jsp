@@ -40,52 +40,62 @@
                     </c:if>
 
                     <!-- Contact Form -->
-                    <div class="glass-card contact-form fade-in-up">
-                        <form id="contactForm"
-                              action="${pageContext.request.contextPath}/contact"
-                              method="POST" novalidate>
-
-                            <!-- Name -->
-                            <div class="mb-4">
-                                <label for="name" class="form-label">
-                                    <i class="bi bi-person me-1"></i>Full Name
-                                </label>
-                                <input type="text" class="form-control form-control-lg" id="name" name="name"
-                                       placeholder="Enter your name" required>
+                    <div class="retro-window fade-in-up">
+                        <div class="retro-window-header">
+                            <span class="retro-window-title"><i class="bi bi-envelope-paper-fill me-2"></i>Secure Message Terminal</span>
+                            <div class="retro-window-dots">
+                                <span class="retro-window-dot close"></span>
+                                <span class="retro-window-dot minimize"></span>
+                                <span class="retro-window-dot maximize"></span>
                             </div>
+                        </div>
+                        <div class="retro-window-body contact-form">
+                            <form id="contactForm"
+                                  action="${pageContext.request.contextPath}/contact"
+                                  method="POST" novalidate>
 
-                            <!-- Email -->
-                            <div class="mb-4">
-                                <label for="email" class="form-label">
-                                    <i class="bi bi-envelope me-1"></i>Email Address
-                                </label>
-                                <input type="email" class="form-control form-control-lg" id="email" name="email"
-                                       placeholder="you@example.com" required>
-                            </div>
+                                <!-- Name -->
+                                <div class="mb-4">
+                                    <label for="name" class="form-label">
+                                        <i class="bi bi-person me-1"></i>Full Name
+                                    </label>
+                                    <input type="text" class="form-control form-control-lg" id="name" name="name"
+                                           placeholder="Enter your name" required>
+                                </div>
 
-                            <!-- Subject -->
-                            <div class="mb-4">
-                                <label for="subject" class="form-label">
-                                    <i class="bi bi-chat-left-text me-1"></i>Subject
-                                </label>
-                                <input type="text" class="form-control form-control-lg" id="subject" name="subject"
-                                       placeholder="What's this about?" required>
-                            </div>
+                                <!-- Email -->
+                                <div class="mb-4">
+                                    <label for="email" class="form-label">
+                                        <i class="bi bi-envelope me-1"></i>Email Address
+                                    </label>
+                                    <input type="email" class="form-control form-control-lg" id="email" name="email"
+                                           placeholder="you@example.com" required>
+                                </div>
 
-                            <!-- Message -->
-                            <div class="mb-4">
-                                <label for="message" class="form-label">
-                                    <i class="bi bi-pencil-square me-1"></i>Your Message
-                                </label>
-                                <textarea class="form-control form-control-lg" id="message" name="message"
-                                          rows="6" placeholder="Write your message here..." required></textarea>
-                            </div>
+                                <!-- Subject -->
+                                <div class="mb-4">
+                                    <label for="subject" class="form-label">
+                                        <i class="bi bi-chat-left-text me-1"></i>Subject
+                                    </label>
+                                    <input type="text" class="form-control form-control-lg" id="subject" name="subject"
+                                           placeholder="What's this about?" required>
+                                </div>
 
-                            <!-- Submit -->
-                            <button type="submit" class="btn-glow w-100" style="padding: 1rem;">
-                                <i class="bi bi-send-fill me-2"></i>Send Message
-                            </button>
-                        </form>
+                                <!-- Message -->
+                                <div class="mb-4">
+                                    <label for="message" class="form-label">
+                                        <i class="bi bi-pencil-square me-1"></i>Your Message
+                                    </label>
+                                    <textarea class="form-control form-control-lg" id="message" name="message"
+                                              rows="6" placeholder="Write your message here..." required></textarea>
+                                </div>
+
+                                <!-- Submit -->
+                                <button type="submit" class="btn-retro w-100" style="padding: 1rem;">
+                                    <span><i class="bi bi-send-fill me-2"></i>Send Message</span>
+                                </button>
+                            </form>
+                        </div>
                     </div>
 
                     <!-- Contact Info Cards -->
