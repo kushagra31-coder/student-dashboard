@@ -70,4 +70,4 @@ A dynamic, multi-user portfolio and dashboard system built for students to showc
 *   **Harshit Singhi** - [GitHub](https://github.com/HarshDuck)
 
 ---
-*Built with ❤️ for SIH and beyond.*
+
