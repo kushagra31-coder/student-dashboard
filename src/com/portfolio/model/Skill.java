@@ -6,6 +6,7 @@ package com.portfolio.model;
 public class Skill {
 
     private int id;
+    private int studentId;
     private String category;
     private String name;
     private int proficiencyPercent;
@@ -14,14 +15,17 @@ public class Skill {
     public Skill() {
     }
 
-    public Skill(int id, String category, String name, int proficiencyPercent) {
+    public Skill(int id, int studentId, String category, String name, int proficiencyPercent) {
         this.id = id;
+        this.studentId = studentId;
         this.category = category;
         this.name = name;
         this.proficiencyPercent = proficiencyPercent;
     }
 
     // ── Getters & Setters ──────────────────────────────────────────────
+    public int getStudentId() { return studentId; }
+    public void setStudentId(int studentId) { this.studentId = studentId; }
 
     public int getId() {
         return id;

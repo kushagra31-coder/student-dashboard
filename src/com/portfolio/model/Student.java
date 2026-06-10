@@ -16,6 +16,8 @@ public class Student {
     private String photoPath;
     private String password;
     private int semester;
+    private String email;
+    private String phone;
 
     /** No-arg constructor required for JavaBean compliance. */
     public Student() {
@@ -23,7 +25,7 @@ public class Student {
 
     public Student(int id, String name, String branch, String role, String bio,
                    String githubUrl, String linkedinUrl, String resumeUrl, String photoPath,
-                   String password, int semester) {
+                   String password, int semester, String email, String phone) {
         this.id = id;
         this.name = name;
         this.branch = branch;
@@ -35,6 +37,8 @@ public class Student {
         this.photoPath = photoPath;
         this.password = password;
         this.semester = semester;
+        this.email = email;
+        this.phone = phone;
     }
 
     // ── Getters & Setters ──────────────────────────────────────────────
@@ -125,6 +129,22 @@ public class Student {
 
     public void setSemester(int semester) {
         this.semester = semester;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     @Override

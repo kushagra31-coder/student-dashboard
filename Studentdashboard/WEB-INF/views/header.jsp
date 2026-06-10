@@ -24,14 +24,12 @@
 </head>
 <body>
 
-<!-- CRT Monitor Scanlines -->
-<div class="crt-overlay"></div>
-
-<!-- Particle / Synthwave Grid Canvas -->
-<canvas id="particle-canvas"></canvas>
-
 <!-- Theme Toggle -->
-<button id="theme-toggle" class="btn btn-outline-light position-fixed top-0 end-0 m-3" style="z-index: 1050; border-radius: 50%; width: 45px; height: 45px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);"><i class="bi bi-moon-fill"></i></button>
+<button id="theme-toggle" class="btn btn-expressive position-fixed top-0 end-0 m-3" style="z-index: 1050; border-radius: 50%; width: 50px; height: 50px; padding: 0; box-shadow: 4px 4px 0px var(--border-color); border: 2px solid var(--border-color); background: var(--surface); color: var(--text-main); display: flex; align-items: center; justify-content: center;">
+    <i class="bi bi-moon-fill"></i>
+</button>
+
+
 
 <!-- ============ NAVBAR ============ -->
 <nav class="navbar navbar-expand-lg nav-glass fixed-top">

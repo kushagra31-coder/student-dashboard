@@ -58,10 +58,10 @@ A dynamic, multi-user portfolio and dashboard system built for students to showc
 
 **Default Credentials:**
 
-*   **Admin:** `4` / `admin@123`
-*   **Student (Kushagra):** `1` / `kushagra@123`
-*   **Student (Bhagyesh):** `2` / `bhagyesh@123`
-*   **Student (Harshit):** `3` / `harshit@123`
+*   **Admin:** `4` / `admin123`
+*   **Student (Kushagra):** `1` / `password123`
+*   **Student (Bhagyesh):** `2` / `password123`
+*   **Student (Harshit):** `3` / `password123`
 
 ## 👨‍💻 Contributors
 

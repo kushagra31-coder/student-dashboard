@@ -47,6 +47,8 @@ public class HomeServlet extends HttpServlet {
         List<Project> projects = projectDAO.getProjectsByStudentId(studentId);
         List<Achievement> achievements = achievementDAO.getAchievementsByStudentId(studentId);
         List<Certificate> certificates = certificateDAO.getCertificatesByStudentId(studentId);
+        List<com.portfolio.model.Skill> skills = new com.portfolio.dao.SkillDAO().getSkillsByStudentId(studentId);
+        List<com.portfolio.model.Club> clubs = new com.portfolio.dao.ClubDAO().getClubsByStudentId(studentId);
 
         int projectCount = projectDAO.getProjectCount(studentId);
         int documentCount = documentDAO.getDocumentCount(studentId);
@@ -58,6 +60,8 @@ public class HomeServlet extends HttpServlet {
         request.setAttribute("projects", projects);
         request.setAttribute("achievements", achievements);
         request.setAttribute("certificates", certificates);
+        request.setAttribute("skills", skills);
+        request.setAttribute("clubs", clubs);
         request.setAttribute("projectCount", projectCount);
         request.setAttribute("documentCount", documentCount);
         request.setAttribute("achievementCount", achievementCount);

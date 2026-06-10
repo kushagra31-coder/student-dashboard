@@ -32,14 +32,8 @@
     </style>
 </head>
 <body>
-    <!-- CRT Monitor Scanlines -->
-    <div class="crt-overlay"></div>
 
-    <!-- Synthwave Grid Canvas -->
-    <canvas id="particle-canvas"></canvas>
 
-    <!-- Theme Toggle -->
-    <button id="theme-toggle" class="btn btn-outline-light position-fixed top-0 end-0 m-3" style="z-index: 1050; border-radius: 50%; width: 45px; height: 45px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);"></button>
 
     <div class="login-wrapper">
         <div class="retro-window login-card fade-in-up">

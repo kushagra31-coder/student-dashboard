@@ -22,9 +22,18 @@ public class ContactServlet extends HttpServlet {
 
     private final ContactDAO contactDAO = new ContactDAO();
 
+    private final com.portfolio.dao.StudentDAO studentDAO = new com.portfolio.dao.StudentDAO();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        jakarta.servlet.http.HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("studentId") != null) {
+            int studentId = (Integer) session.getAttribute("studentId");
+            com.portfolio.model.Student student = studentDAO.getStudentById(studentId);
+            request.setAttribute("student", student);
+        }
 
         request.setAttribute("currentPage", "contact");
         request.getRequestDispatcher("/contact.jsp").forward(request, response);

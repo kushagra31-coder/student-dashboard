@@ -60,7 +60,7 @@
                                         <i class="bi bi-person me-1"></i>Full Name
                                     </label>
                                     <input type="text" class="form-control form-control-lg" id="name" name="name"
-                                           placeholder="Enter your name" required>
+                                           placeholder="Enter your name" value="${student != null ? student.name : ''}" required>
                                 </div>
 
                                 <!-- Email -->
@@ -69,7 +69,7 @@
                                         <i class="bi bi-envelope me-1"></i>Email Address
                                     </label>
                                     <input type="email" class="form-control form-control-lg" id="email" name="email"
-                                           placeholder="you@example.com" required>
+                                           placeholder="you@example.com" value="${student != null ? student.email : ''}" required>
                                 </div>
 
                                 <!-- Subject -->
@@ -114,7 +114,7 @@
                                 <i class="bi bi-envelope-fill text-gradient" style="font-size: 2rem;"></i>
                                 <h6 class="mt-3 mb-1">Email</h6>
                                 <p class="mb-0" style="color: var(--text-muted); font-size: 0.95rem;">
-                                    kushagrasingh240033@acropolis.in
+                                    ${student != null ? student.email : 'contact@acropolis.in'}
                                 </p>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                                 <i class="bi bi-telephone-fill text-gradient" style="font-size: 2rem;"></i>
                                 <h6 class="mt-3 mb-1">Phone</h6>
                                 <p class="mb-0" style="color: var(--text-muted); font-size: 0.95rem;">
-                                    +91 8435841607
+                                    ${student != null ? student.phone : '+91 0000000000'}
                                 </p>
                             </div>
                         </div>

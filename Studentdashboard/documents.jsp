@@ -27,11 +27,7 @@
     </style>
 </head>
 <body class="dashboard-body">
-    <!-- CRT Monitor Scanlines -->
-    <div class="crt-overlay"></div>
 
-    <!-- Synthwave Grid Canvas -->
-    <canvas id="particle-canvas"></canvas>
     
     <jsp:include page="/WEB-INF/views/sidebar.jsp" />
 

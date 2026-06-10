@@ -23,7 +23,7 @@ public class StudentDAO {
     public List<Student> getAllStudents() {
         List<Student> students = new ArrayList<>();
         String sql = "SELECT id, name, branch, role, bio, github_url, "
-                   + "linkedin_url, resume_url, photo_path, password, semester FROM students";
+                   + "linkedin_url, resume_url, photo_path, password, semester, email, phone FROM students";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -46,7 +46,7 @@ public class StudentDAO {
      */
     public Student getStudentById(int id) {
         String sql = "SELECT id, name, branch, role, bio, github_url, "
-                   + "linkedin_url, resume_url, photo_path, password, semester FROM students WHERE id = ?";
+                   + "linkedin_url, resume_url, photo_path, password, semester, email, phone FROM students WHERE id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -72,7 +72,7 @@ public class StudentDAO {
      */
     public Student authenticate(int id, String password) {
         String sql = "SELECT id, name, branch, role, bio, github_url, "
-                   + "linkedin_url, resume_url, photo_path, password, semester FROM students WHERE id = ? AND password = ?";
+                   + "linkedin_url, resume_url, photo_path, password, semester, email, phone FROM students WHERE id = ? AND password = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -104,6 +104,8 @@ public class StudentDAO {
         s.setPhotoPath(rs.getString("photo_path"));
         s.setPassword(rs.getString("password"));
         s.setSemester(rs.getInt("semester"));
+        s.setEmail(rs.getString("email"));
+        s.setPhone(rs.getString("phone"));
         return s;
     }
 }
