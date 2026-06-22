@@ -1,16 +1,10 @@
--- ============================================
--- Portfolio Database Schema
--- Dynamic JSP Student Portfolio Dashboard
--- ============================================
+
 
 CREATE DATABASE IF NOT EXISTS portfolio_db;
 USE portfolio_db;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
--- ============================================
--- Drop Existing Tables
--- ============================================
 DROP TABLE IF EXISTS contact_messages;
 DROP TABLE IF EXISTS documents;
 DROP TABLE IF EXISTS certificates;
@@ -21,9 +15,6 @@ DROP TABLE IF EXISTS skills;
 DROP TABLE IF EXISTS achievements;
 DROP TABLE IF EXISTS students;
 
--- ============================================
--- Students Table
--- ============================================
 CREATE TABLE students (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -38,9 +29,7 @@ CREATE TABLE students (
     semester INT DEFAULT 4
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
--- Projects Table
--- ============================================
+
 CREATE TABLE projects (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
@@ -53,9 +42,7 @@ CREATE TABLE projects (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
--- Skills Table
--- ============================================
+
 CREATE TABLE skills (
     id INT AUTO_INCREMENT PRIMARY KEY,
     category VARCHAR(50) NOT NULL,
@@ -63,9 +50,7 @@ CREATE TABLE skills (
     proficiency_percent INT DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
--- Achievements Table
--- ============================================
+
 CREATE TABLE achievements (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   student_id INT DEFAULT NULL,
@@ -76,9 +61,6 @@ CREATE TABLE achievements (
   FOREIGN KEY (student_id) REFERENCES students (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
--- Contact Messages Table
--- ============================================
 CREATE TABLE contact_messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -88,9 +70,7 @@ CREATE TABLE contact_messages (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
--- Documents Table
--- ============================================
+
 CREATE TABLE documents (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT,
@@ -100,9 +80,7 @@ CREATE TABLE documents (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
--- Certificates Table
--- ============================================
+
 CREATE TABLE certificates (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT,
@@ -112,9 +90,7 @@ CREATE TABLE certificates (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
--- Attendance Table
--- ============================================
+
 CREATE TABLE attendance (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT,
@@ -125,9 +101,7 @@ CREATE TABLE attendance (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
--- Login Logs Table
--- ============================================
+
 CREATE TABLE login_logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -137,27 +111,22 @@ CREATE TABLE login_logs (
     ip_address VARCHAR(50)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
--- Seed Data: 3 Students + 1 Admin
--- ============================================
+
+
 INSERT INTO students (id, name, branch, role, bio, github_url, linkedin_url, resume_url, photo_path, password, semester) VALUES
 (1, 'Kushagra Tomar', 'B.Tech Computer Science Engineering', 'student', 'Passionate full-stack developer focusing on Java and modern web technologies.', 'https://github.com/kushagratomar', 'https://linkedin.com/in/kushagratomar', '#', 'images/student1.jpg', 'password123', 4),
 (2, 'Bhagyesh', 'B.Tech Computer Science Engineering', 'student', 'Frontend enthusiast and UI/UX designer.', 'https://github.com/bhagyesh', 'https://linkedin.com/in/bhagyesh', '#', 'images/student2.jpg', 'password123', 4),
 (3, 'Harshit', 'B.Tech Computer Science Engineering', 'student', 'Backend engineer and database specialist.', 'https://github.com/harshit', 'https://linkedin.com/in/harshit', '#', 'images/student3.jpg', 'password123', 4),
 (4, 'System Admin', 'Administration', 'admin', 'System administrator account.', '', '', '', 'images/admin.jpg', 'admin123', 0);
 
--- ============================================
--- Seed Data: Projects
--- ============================================
+
 INSERT INTO projects (title, description, tech_stack, github_url, live_demo_url, image_path, student_id) VALUES
 ('E-Commerce Platform', 'A full-featured online shopping platform.', 'Java, Spring Boot', 'https://github.com/kushagratomar/ecommerce', '#', 'images/project1.jpg', 1),
 ('AI Chat Assistant', 'Intelligent chatbot.', 'Python, React', 'https://github.com/kushagratomar/ai-chat', '#', 'images/project2.jpg', 1),
 ('Portfolio Design System', 'Component library built for rapid prototyping.', 'React, TypeScript', 'https://github.com/bhagyesh/design', '#', 'images/project3.jpg', 2),
 ('Cloud Infrastructure Monitor', 'Real-time cloud monitoring dashboard.', 'Python, Django', 'https://github.com/harshit/cloud', '#', 'images/project2.jpg', 3);
 
--- ============================================
--- Seed Data: Documents (Identical core docs)
--- ============================================
+
 INSERT INTO documents (student_id, title, file_path) VALUES
 (1, '10th Marksheet', 'documents/10th_marksheet.pdf'),
 (1, '12th Marksheet', 'documents/12th_marksheet.pdf'),
@@ -172,9 +141,7 @@ INSERT INTO documents (student_id, title, file_path) VALUES
 (3, 'Aadhaar Card', 'documents/aadhaar.pdf'),
 (3, 'Sem-4 Result', 'documents/sem4_result.pdf');
 
--- ============================================
--- Seed Data: Attendance
--- ============================================
+
 INSERT INTO attendance (student_id, subject, total_classes, attended, percentage) VALUES
 (1, 'Data Structures', 40, 36, 90.00),
 (1, 'Computer Networks', 35, 30, 85.71),
@@ -183,9 +150,7 @@ INSERT INTO attendance (student_id, subject, total_classes, attended, percentage
 (3, 'Data Structures', 40, 32, 80.00),
 (3, 'Computer Networks', 35, 34, 97.14);
 
--- ============================================
--- Seed Data: Achievements
--- ============================================
+
 INSERT INTO achievements (student_id, title, description, icon) VALUES
 (1, 'Hackathon Winner', '1st place in state hackathon', 'bi-trophy'),
 (2, 'UI Design Award', 'Best UI/UX for E-commerce app', 'bi-palette'),

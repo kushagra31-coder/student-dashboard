@@ -1,5 +1,4 @@
-# Compile Script for Dynamic JSP Portfolio
-# Run this from the portfolio root directory: c:\Users\tomar\Downloads\portfolio
+
 
 $ErrorActionPreference = "Stop"
 
@@ -11,13 +10,11 @@ $WEB_DIR = "$PROJECT_ROOT\Studentdashboard"
 $CLASSES_DIR = "$WEB_DIR\WEB-INF\classes"
 $LIB_DIR = "$WEB_DIR\WEB-INF\lib"
 
-# Build classpath from Tomcat servlet-api + project libs
 $CLASSPATH = "$TOMCAT_HOME\lib\servlet-api.jar;$TOMCAT_HOME\lib\jsp-api.jar;$LIB_DIR\mysql-connector-j-9.7.0.jar;$LIB_DIR\jakarta.servlet.jsp.jstl-api-3.0.0.jar;$LIB_DIR\jakarta.servlet.jsp.jstl-3.0.1.jar"
 
-# Ensure classes directory exists
 New-Item -ItemType Directory -Force -Path $CLASSES_DIR | Out-Null
 
-# Find all Java source files
+
 $javaFiles = Get-ChildItem -Path $SRC_DIR -Recurse -Filter "*.java" | ForEach-Object { $_.FullName }
 
 Write-Host "========================================" -ForegroundColor Cyan
@@ -36,7 +33,7 @@ foreach ($file in $javaFiles) {
 
 Write-Host ""
 
-# Compile all Java files at once
+
 & "$JAVA_HOME\bin\javac.exe" `
     -cp $CLASSPATH `
     -d $CLASSES_DIR `
@@ -49,10 +46,24 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "  BUILD SUCCESSFUL" -ForegroundColor Green
     Write-Host "========================================" -ForegroundColor Green
     Write-Host ""
-    
-    # Count compiled class files
+
     $classFiles = Get-ChildItem -Path $CLASSES_DIR -Recurse -Filter "*.class"
     Write-Host "  Generated $($classFiles.Count) class files" -ForegroundColor Green
+    Write-Host ""
+
+    # ── AUTO-DEPLOY to Tomcat webapps ──────────────────────────────────────
+    $DEPLOY_DIR = "$TOMCAT_HOME\webapps\Studentdashboard"
+    Write-Host "========================================" -ForegroundColor Cyan
+    Write-Host "  DEPLOYING to Tomcat webapps" -ForegroundColor Cyan
+    Write-Host "========================================" -ForegroundColor Cyan
+    Write-Host "  Target: $DEPLOY_DIR" -ForegroundColor Yellow
+    Write-Host ""
+
+    Copy-Item -Path "$WEB_DIR\*" -Destination $DEPLOY_DIR -Recurse -Force
+
+    Write-Host "  Deploy complete!" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "  Open: http://localhost:8080/Studentdashboard/" -ForegroundColor Cyan
     Write-Host ""
 } else {
     Write-Host "========================================" -ForegroundColor Red

@@ -5,11 +5,11 @@
 <%-- Project Card — Text-focused with description + GitHub link --%>
 <div class="col fade-in-up">
     <div class="glass-card project-card h-100">
-        <!-- Colored accent bar at top -->
+     
         <div class="project-accent-bar"></div>
 
         <div class="project-body">
-            <!-- Project icon + title -->
+          
             <div class="project-header-row">
                 <div class="project-icon-wrap">
                     <i class="bi bi-folder-fill"></i>
@@ -19,17 +19,17 @@
                 </div>
             </div>
 
-            <!-- Description -->
+          
             <p class="project-description"><c:out value="${project.description}"/></p>
 
-            <!-- Tech Stack Badges -->
+           
             <div class="tech-stack">
                 <c:forEach var="tech" items="${fn:split(project.techStack, ',')}">
                     <span class="tech-badge"><c:out value="${fn:trim(tech)}"/></span>
                 </c:forEach>
             </div>
 
-            <!-- Links -->
+           
             <div class="project-links mt-auto">
                 <c:if test="${not empty project.githubUrl}">
                     <a href="<c:out value='${project.githubUrl}'/>" target="_blank" rel="noopener"

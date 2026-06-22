@@ -1,13 +1,11 @@
--- ============================================
--- Portfolio Database Schema & Seed Data
--- ============================================
+
 
 CREATE DATABASE IF NOT EXISTS portfolio_db;
 USE portfolio_db;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
--- Drop Existing Tables
+
 DROP TABLE IF EXISTS contact_messages;
 DROP TABLE IF EXISTS documents;
 DROP TABLE IF EXISTS certificates;
@@ -19,7 +17,7 @@ DROP TABLE IF EXISTS achievements;
 DROP TABLE IF EXISTS clubs;
 DROP TABLE IF EXISTS students;
 
--- Students Table (Added email and phone)
+
 CREATE TABLE students (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -36,7 +34,7 @@ CREATE TABLE students (
     phone VARCHAR(20)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Projects Table
+
 CREATE TABLE projects (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
@@ -49,7 +47,6 @@ CREATE TABLE projects (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Skills Table (Added student_id)
 CREATE TABLE skills (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT,
@@ -59,7 +56,6 @@ CREATE TABLE skills (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Clubs Table (New)
 CREATE TABLE clubs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT,
@@ -69,7 +65,6 @@ CREATE TABLE clubs (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Achievements Table
 CREATE TABLE achievements (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   student_id INT DEFAULT NULL,
@@ -80,7 +75,6 @@ CREATE TABLE achievements (
   FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Contact Messages Table
 CREATE TABLE contact_messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -90,7 +84,6 @@ CREATE TABLE contact_messages (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Documents Table
 CREATE TABLE documents (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT,
@@ -100,7 +93,6 @@ CREATE TABLE documents (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Certificates Table
 CREATE TABLE certificates (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT,
@@ -110,7 +102,6 @@ CREATE TABLE certificates (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Attendance Table
 CREATE TABLE attendance (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT,
@@ -121,7 +112,6 @@ CREATE TABLE attendance (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Login Logs Table
 CREATE TABLE login_logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,

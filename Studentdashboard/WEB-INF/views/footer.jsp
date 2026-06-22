@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<!-- ============ FOOTER ============ -->
+
 <footer class="footer-glass">
     <div class="container">
         <div class="row align-items-center gy-3">
@@ -24,9 +24,9 @@
     </div>
 </footer>
 
-<!-- Bootstrap 5.3 JS Bundle -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Custom JS -->
+
 <script src="${pageContext.request.contextPath}/js/main.js"></script>
 </body>
 </html>

@@ -9,7 +9,7 @@ INSERT INTO projects (student_id, title, description, tech_stack, github_url, li
 (1, 'AI-Powered Chat Assistant', 'A contextual chatbot utilizing NLP models to assist students with university queries and course selections in real-time.', 'Python, TensorFlow, React, Node.js', 'https://github.com/kushagra/ai-chat', 'https://ai-chat.demo.com', 'images/project1.jpg'),
 (1, 'Quantum Encryption Simulator', 'A visual simulation tool demonstrating the principles of Quantum Key Distribution (QKD) using BB84 protocol over a simulated network.', 'Java, JavaFX, cryptography', 'https://github.com/kushagra/quantum-sim', 'https://quantum-sim.demo.com', 'images/project2.jpg');
 
--- Insert Fake Projects for Student 2 (Bhagyesh)
+--  Student 2 (Bhagyesh)
 INSERT INTO projects (student_id, title, description, tech_stack, github_url, live_demo_url, image_path) VALUES
 (2, 'Smart Campus IoT Network', 'An integrated IoT system using ESP32 sensors to monitor campus library occupancy and environmental parameters.', 'C++, ESP32, MQTT, Vue.js', 'https://github.com/bhagyesh/iot-campus', 'https://iot-campus.demo.com', 'images/project3.jpg'),
 (2, 'Decentralized Voting DApp', 'A secure voting application deployed on the Ethereum testnet to ensure tamper-proof student union elections.', 'Solidity, Web3.js, React, Truffle', 'https://github.com/bhagyesh/voting-dapp', 'https://voting-dapp.demo.com', 'images/project1.jpg');

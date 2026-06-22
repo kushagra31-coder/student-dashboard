@@ -4,7 +4,7 @@
 <%-- Student Card Fragment — Used inside c:forEach var="student" --%>
 <div class="col fade-in-up">
     <div class="glass-card student-card">
-        <!-- Student Photo -->
+     
         <div class="student-photo-wrapper">
             <c:choose>
                 <c:when test="${not empty student.photoPath}">
@@ -26,7 +26,7 @@
         <p class="student-branch"><c:out value="${student.branch}"/></p>
         <p class="student-bio"><c:out value="${student.bio}"/></p>
 
-        <!-- Social Links -->
+      
         <div class="student-socials">
             <c:if test="${not empty student.githubUrl}">
                 <a href="<c:out value='${student.githubUrl}'/>" target="_blank" rel="noopener"

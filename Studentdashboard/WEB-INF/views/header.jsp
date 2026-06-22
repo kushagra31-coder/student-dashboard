@@ -8,23 +8,22 @@
     <meta name="description" content="Student Portfolio Dashboard — Showcasing student excellence through innovative projects and skills.">
     <title><c:out value="${pageTitle}" default="StudentDash — Portfolio Dashboard"/></title>
 
-    <!-- Google Fonts -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
-    <!-- Custom Stylesheet -->
+  
     <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
 </head>
 <body>
 
-<!-- Theme Toggle -->
+
 <button id="theme-toggle" class="btn btn-expressive position-fixed top-0 end-0 m-3" style="z-index: 1050; border-radius: 50%; width: 50px; height: 50px; padding: 0; box-shadow: 4px 4px 0px var(--border-color); border: 2px solid var(--border-color); background: var(--surface); color: var(--text-main); display: flex; align-items: center; justify-content: center;">
     <i class="bi bi-moon-fill"></i>
 </button>

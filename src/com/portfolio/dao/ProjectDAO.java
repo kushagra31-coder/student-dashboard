@@ -2,7 +2,6 @@ package com.portfolio.dao;
 
 import com.portfolio.model.Project;
 import com.portfolio.util.DBConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,16 +9,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Data-access object for the {@code projects} table.
- */
 public class ProjectDAO {
 
-    /**
-     * Retrieves every project record from the database.
-     *
-     * @return list of all projects (never {@code null})
-     */
+    
     public List<Project> getAllProjects() {
         List<Project> projects = new ArrayList<>();
         String sql = "SELECT id, title, description, tech_stack, github_url, "
@@ -38,12 +30,7 @@ public class ProjectDAO {
         return projects;
     }
 
-    /**
-     * Retrieves all projects belonging to a specific student.
-     *
-     * @param studentId the owning student's id
-     * @return list of matching projects (never {@code null})
-     */
+    
     public List<Project> getProjectsByStudentId(int studentId) {
         List<Project> projects = new ArrayList<>();
         String sql = "SELECT id, title, description, tech_stack, github_url, "

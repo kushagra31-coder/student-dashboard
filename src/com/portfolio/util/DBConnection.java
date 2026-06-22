@@ -8,6 +8,8 @@ import java.sql.SQLException;
  * Centralized JDBC connection factory for the portfolio database.
  * <p>
  * Usage:
+ * 
+ * 
  * <pre>
  *   try (Connection conn = DBConnection.getConnection()) {
  *       // work with conn
