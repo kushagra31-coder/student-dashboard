@@ -99,7 +99,6 @@
             color: #4ade80;
         }
 
-        /* Responsive stacking on small screens */
         @media (max-width: 480px) {
             .form-grid {
                 grid-template-columns: 1fr;
@@ -109,7 +108,6 @@
 </head>
 <body>
 
-<!-- Particle Canvas Background -->
 <canvas id="particle-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
 
 <div class="register-wrapper">

@@ -3,11 +3,8 @@
 
 <%-- Include Header --%>
 <%@ include file="/WEB-INF/views/header.jsp" %>
-
-<!-- ============ PAGE WRAPPER ============ -->
 <main class="page-wrapper">
 
-    <!-- ============ PAGE HEADER ============ -->
     <section class="page-header">
         <div class="container text-center">
             <h1 class="section-title fade-in-up">
@@ -19,7 +16,6 @@
         </div>
     </section>
 
-    <!-- ============ STUDENTS GRID ============ -->
     <section class="pb-5">
         <div class="container">
             <c:choose>

@@ -2,23 +2,19 @@ package com.portfolio.dao;
 
 import com.portfolio.model.Attendance;
 import com.portfolio.util.DBConnection;
-
 import java.sql.*;
 import java.util.*;
 
 /**
  * DAO for attendance management.
- * Subjects: ADA, ADC M3, DOTNET, DBMS, COA  (RGPV 4th Sem CSIT)
+ * Subjects: ADA, ADC, DOTNET, DBMS, COA  (RGPV 4th Sem CSIT)
  */
 public class AttendanceDAO {
 
     public static final List<String> SUBJECTS = Arrays.asList(
-            "ADA", "ADC M3", "DOTNET", "DBMS", "COA"
+            "ADA", "ADC", "DOTNET", "DBMS", "COA"
     );
 
-    // ── Read ──────────────────────────────────────────────────────────────
-
-    /** All attendance rows for one student, keyed by subject name. */
     public Map<String, Attendance> getAttendanceByStudentId(int studentId) {
         Map<String, Attendance> map = new LinkedHashMap<>();
         String sql = "SELECT * FROM attendance WHERE student_id = ? ORDER BY subject";

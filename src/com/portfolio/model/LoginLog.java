@@ -2,9 +2,6 @@ package com.portfolio.model;
 
 import java.sql.Timestamp;
 
-/**
- * Represents a login audit log entry.
- */
 public class LoginLog {
 
     private int id;
@@ -14,7 +11,6 @@ public class LoginLog {
     private Timestamp loginTime;
     private String ipAddress;
 
-    /** No-arg constructor required for JavaBean compliance. */
     public LoginLog() {
     }
 

@@ -1,8 +1,5 @@
 package com.portfolio.model;
 
-/**
- * Represents a technical skill with category and proficiency level.
- */
 public class Skill {
 
     private int id;
@@ -10,8 +7,6 @@ public class Skill {
     private String category;
     private String name;
     private int proficiencyPercent;
-
-    /** No-arg constructor required for JavaBean compliance. */
     public Skill() {
     }
 

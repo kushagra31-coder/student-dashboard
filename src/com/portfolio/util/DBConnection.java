@@ -4,18 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Centralized JDBC connection factory for the portfolio database.
- * <p>
- * Usage:
- * 
- * 
- * <pre>
- *   try (Connection conn = DBConnection.getConnection()) {
- *       // work with conn
- *   }
- * </pre>
- */
 public class DBConnection {
 
     private static final String URL  = "jdbc:mysql://localhost:3306/portfolio_db";
@@ -41,8 +29,7 @@ public class DBConnection {
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASS);
     }
-
-    // Utility class – prevent instantiation.
+    
     private DBConnection() {
     }
 }

@@ -121,10 +121,6 @@ CREATE TABLE login_logs (
     ip_address VARCHAR(50)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
--- Seed Data
--- ============================================
-
 -- Students
 INSERT INTO students (id, name, branch, role, bio, github_url, linkedin_url, resume_url, photo_path, password, semester, email, phone) VALUES
 (1, 'Kushagra Tomar', 'B.Tech Computer Science Engineering', 'student', 'Passionate full-stack developer focusing on Java and modern web technologies.', 'https://github.com/kushagratomar', 'https://linkedin.com/in/kushagratomar', '#', 'images/student1.jpg', 'password123', 4, 'kushagra@dashboard.com', '+91 9876543210'),

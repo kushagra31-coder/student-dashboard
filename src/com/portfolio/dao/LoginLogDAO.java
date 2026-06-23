@@ -2,7 +2,6 @@ package com.portfolio.dao;
 
 import com.portfolio.model.LoginLog;
 import com.portfolio.util.DBConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,9 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Data-access object for the {@code login_logs} table.
- */
 public class LoginLogDAO {
 
     /**
