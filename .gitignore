@@ -70,7 +70,7 @@ application-prod.properties
 .env
 *.key
 *.pem   
-src/main/resources/db.properties
+
 target/
 .vscode/
 .idea/
