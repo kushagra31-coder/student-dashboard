@@ -70,3 +70,5 @@ application-prod.properties
 .env
 *.key
 *.pem   
+
+target/
