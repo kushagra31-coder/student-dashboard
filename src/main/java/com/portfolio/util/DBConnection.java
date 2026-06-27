@@ -1,35 +1,48 @@
 package com.portfolio.util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DBConnection {
 
-    private static final String URL  = "jdbc:mysql://localhost:3306/portfolio_db";
-    private static final String USER = "root";
-    private static final String PASS = "akaza";
+    private static final String URL;
+    private static final String USER;
+    private static final String PASS;
 
-    // Load the MySQL JDBC driver once when the class is first referenced.
     static {
         try {
+            Properties props = new Properties();
+
+            try (InputStream input = DBConnection.class
+                    .getClassLoader()
+                    .getResourceAsStream("db.properties")) {
+
+                if (input == null) {
+                    throw new RuntimeException("db.properties not found");
+                }
+
+                props.load(input);
+
+                URL = props.getProperty("db.url");
+                USER = props.getProperty("db.username");
+                PASS = props.getProperty("db.password");
+            }
+
             Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("MySQL JDBC Driver not found. "
-                    + "Ensure mysql-connector-j JAR is on the classpath.", e);
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException("Failed to load database configuration.", e);
         }
     }
 
-    /**
-     * Returns a new JDBC {@link Connection} to the portfolio_db database.
-     *
-     * @return an open database connection
-     * @throws SQLException if a database access error occurs
-     */
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASS);
     }
-    
+
     private DBConnection() {
     }
 }

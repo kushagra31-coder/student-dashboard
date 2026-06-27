@@ -1,71 +1,194 @@
-# Student Portfolio Dashboard 🎓
+# Student Portfolio Dashboard
 
-A dynamic, multi-user portfolio and dashboard system built for students to showcase their projects, achievements, and academic records. Features a vibrant, playful, and brutalist **Expressive Design System**.
+A Java-based Student Portfolio Dashboard built using **Java Servlets, JSP, JDBC, Maven, MySQL, and Apache Tomcat 10.1**. The application enables students to manage their academic profiles, projects, skills, certificates, documents, attendance, and contact messages through a web interface.
 
-## ✨ Features
+---
 
-*   **Multi-Role Authentication:** Secure login system supporting multiple students and a dedicated Admin role.
-*   **Expressive Design System:** A stunning, highly-structured aesthetic featuring:
-    *   Vibrant primary colors and bold typography (`IBM Plex Mono`).
-    *   Playful brutalist UI elements with solid borders and sharp drop-shadows.
-    *   Clean, accessible layouts prioritizing readability.
-*   **Theme Toggle:** Instant switching between the vibrant Light mode and a sleek Dark mode interface.
-*   **Student Dashboard:** Personalized views for each student to manage and showcase:
-    *   **Projects:** Add new telemetry projects with tech stack tags and live source links.
-    *   **Certifications:** Upload and manage earned certificates (e.g., AWS, Google UX).
-    *   **Skills:** Display coding languages and technical proficiencies.
-    *   **Clubs & Communities:** Showcase active club memberships and roles (e.g., IEEE, GDC).
-    *   **Documents:** Upload and access official academic documents.
-*   **Admin Panel:** Comprehensive administrative controls including:
-    *   Student Management & detailed profile viewing.
-    *   Login Activity Logs.
-    *   Placement Tracking and Attendance Monitoring.
-    *   Global Document Access.
-*   **Responsive & Interactive:** Fully responsive layout with custom modals for quick data entry directly from the dashboard.
-*   **Password Visibility Toggle:** Convenient toggle to show/hide passwords during login.
+## Features
 
-## 🛠️ Tech Stack
+* Student Registration & Login
+* Dashboard
+* Project Management
+* Skills Management
+* Certificate Management
+* Attendance Management
+* Document Upload & View
+* Contact Form
+* Admin Dashboard
+* Session Authentication
+* MySQL Database Integration
 
-*   **Frontend:** HTML5, CSS3 (Expressive Design System), JavaScript (Vanilla ES6+), Bootstrap 5.3, Bootstrap Icons.
-*   **Backend:** Java Servlets (Jakarta EE 10), JSP (JavaServer Pages), JSTL.
-*   **Database:** MySQL 8.0.
-*   **Server:** Apache Tomcat 10.1.
+---
 
-## 🚀 Getting Started
+## Technology Stack
 
-### Prerequisites
+| Technology     | Version                    |
+| -------------- | -------------------------- |
+| Java           | JDK 17+ (Tested on JDK 25) |
+| Maven          | 3.9+                       |
+| Apache Tomcat  | 10.1.x                     |
+| MySQL          | 8.x                        |
+| JSP & Servlets | Jakarta EE 10              |
+| JDBC           | MySQL Connector/J          |
 
-*   Java Development Kit (JDK) 21 or higher (JDK 25 recommended).
-*   Apache Tomcat 10.1.
-*   MySQL Server 8.0.
+---
 
-### Database Setup
+## Project Structure
 
-1.  Create a MySQL database named `portfolio_db`.
-2.  Execute the provided `patch_db.sql` and `patch_certificates.sql` scripts to create the necessary tables and seed initial data.
-3.  Update the database credentials (username and password) in `src/com/portfolio/util/DBConnection.java` to match your local setup.
+```
+portfolio
+│
+├── src
+│   └── main
+│       ├── java
+│       │   └── com.portfolio
+│       │       ├── dao
+│       │       ├── filter
+│       │       ├── model
+│       │       ├── servlet
+│       │       └── util
+│       │
+│       ├── resources
+│       │   └── db.properties
+│       │
+│       └── webapp
+│           ├── WEB-INF
+│           ├── css
+│           ├── images
+│           ├── js
+│           └── *.jsp
+│
+├── pom.xml
+├── schema.sql
+├── attendance_setup.sql
+├── seed_extra.sql
+└── README.md
+```
 
-### Deployment
+---
 
-1.  Compile all Java files in the `src` directory and output the `.class` files to `Studentdashboard/WEB-INF/classes`.
-    *   You can use the provided `compile.ps1` PowerShell script.
-    *   Ensure `servlet-api.jar`, `jsp-api.jar`, and `mysql-connector-j-9.7.0.jar` are in your classpath during compilation.
-2.  Deploy the entire `Studentdashboard` directory to the `webapps` folder of your Tomcat installation.
-3.  Start the Tomcat server.
+## Prerequisites
 
-### Accessing the Application
+Install the following software before running the project:
 
-*   Navigate to `http://localhost:8080/Studentdashboard/login` in your web browser.
+* Java JDK 17 or later
+* Apache Maven 3.9+
+* Apache Tomcat 10.1
+* MySQL Server 8+
 
-**Default Credentials:**
+Verify installation:
 
-*   **Admin:** `4` / `admin123`
-*   **Student (Kushagra):** `1` / `password123`
-*   **Student (Bhagyesh):** `2` / `password123`
-*   **Student (Harshit):** `3` / `password123`
+```bash
+java -version
+javac -version
+mvn -version
+```
 
-## 👨‍💻 Contributors
+---
 
-*   **Kushagra Singh Tomar** - [GitHub](https://github.com/kushagra31-coder) | [LinkedIn](https://www.linkedin.com/in/kushagra-singh-tomar-94ba55277/)
-*   **Bhagyesh Jain** - [GitHub](https://github.com/bhagyesh-jain) | [LinkedIn](https://www.linkedin.com/in/bhagyesh-jain-a1a86a3a2/)
-*   **Harshit Singhi** - [GitHub](https://github.com/HarshDuck)
+## Clone the Repository
+
+```bash
+git clone <repository-url>
+cd portfolio
+```
+
+---
+
+## Database Setup
+
+Create a database named:
+
+```sql
+portfolio_db
+```
+
+Execute the SQL files in this order:
+
+```
+schema.sql
+attendance_setup.sql
+seed_extra.sql
+```
+
+If additional SQL files are required, execute them as well.
+
+---
+
+## Configure Database
+
+Edit:
+
+```
+src/main/resources/db.properties
+```
+
+Example:
+
+```properties
+db.url=jdbc:mysql://localhost:3306/portfolio_db
+db.username=root
+db.password=your_password
+```
+
+---
+
+## Build the Project
+
+```bash
+mvn clean package
+```
+
+The generated WAR file will be available at:
+
+```
+target/portfolio.war
+```
+
+---
+
+## Deploy to Apache Tomcat
+
+Copy:
+
+```
+target/portfolio.war
+```
+
+into:
+
+```
+<TOMCAT_HOME>/webapps/
+```
+
+Start Tomcat.
+
+Tomcat will automatically extract the WAR.
+
+Open:
+
+```
+http://localhost:8080/portfolio/login
+```
+
+---
+
+## Maven Dependencies
+
+The project uses Maven for dependency management.
+
+Dependencies are downloaded automatically during:
+
+```bash
+mvn clean package
+```
+
+No manual JAR installation is required.
+
+---
+
+## Author
+
+**Kushagra Singh Tomar**
+B.Tech Computer Science (CSIT)
+GitHub: https://github.com/kushagra31-coder
