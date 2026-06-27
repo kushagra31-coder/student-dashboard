@@ -89,7 +89,7 @@ mvn -version
 ## Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/kushagra31-coder/student-dashboard
 cd portfolio
 ```
 
