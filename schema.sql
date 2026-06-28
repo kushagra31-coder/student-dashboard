@@ -1,5 +1,3 @@
-
-
 CREATE DATABASE IF NOT EXISTS portfolio_db;
 USE portfolio_db;
 
@@ -13,8 +11,10 @@ DROP TABLE IF EXISTS login_logs;
 DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS skills;
 DROP TABLE IF EXISTS achievements;
+DROP TABLE IF EXISTS clubs;
 DROP TABLE IF EXISTS students;
 
+-- Students Table
 CREATE TABLE students (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -25,11 +25,13 @@ CREATE TABLE students (
     linkedin_url VARCHAR(255),
     resume_url VARCHAR(255),
     photo_path VARCHAR(255),
-    password VARCHAR(100) DEFAULT 'password',
-    semester INT DEFAULT 4
+    password VARCHAR(100) DEFAULT 'password123',
+    semester INT DEFAULT 4,
+    email VARCHAR(150),
+    phone VARCHAR(20)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+-- Projects Table
 CREATE TABLE projects (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
@@ -39,18 +41,30 @@ CREATE TABLE projects (
     live_demo_url VARCHAR(255),
     image_path VARCHAR(255),
     student_id INT,
-    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE SET NULL
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+-- Skills Table
 CREATE TABLE skills (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
     category VARCHAR(50) NOT NULL,
     name VARCHAR(100) NOT NULL,
-    proficiency_percent INT DEFAULT 0
+    proficiency_percent INT DEFAULT 0,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Clubs Table
+CREATE TABLE clubs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    name VARCHAR(100) NOT NULL,
+    role VARCHAR(100) NOT NULL,
+    description TEXT,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Achievements Table
 CREATE TABLE achievements (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   student_id INT DEFAULT NULL,
@@ -58,9 +72,10 @@ CREATE TABLE achievements (
   description TEXT,
   date_achieved DATE DEFAULT NULL,
   icon VARCHAR(50) DEFAULT 'bi-trophy',
-  FOREIGN KEY (student_id) REFERENCES students (id) ON DELETE CASCADE
+  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Contact Messages Table
 CREATE TABLE contact_messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -70,7 +85,7 @@ CREATE TABLE contact_messages (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+-- Documents Table
 CREATE TABLE documents (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT,
@@ -80,7 +95,7 @@ CREATE TABLE documents (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+-- Certificates Table
 CREATE TABLE certificates (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT,
@@ -90,7 +105,7 @@ CREATE TABLE certificates (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+-- Attendance Table
 CREATE TABLE attendance (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT,
@@ -101,7 +116,7 @@ CREATE TABLE attendance (
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+-- Login Logs Table
 CREATE TABLE login_logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -111,37 +126,65 @@ CREATE TABLE login_logs (
     ip_address VARCHAR(50)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Seed Students (with updated contact details from patch_db)
+INSERT INTO students (id, name, branch, role, bio, github_url, linkedin_url, resume_url, photo_path, password, semester, email, phone) VALUES
+(1, 'Kushagra Tomar', 'B.Tech Computer Science Engineering', 'student', 'Passionate full-stack developer focusing on Java and modern web technologies.', 'https://github.com/kushagratomar', 'https://linkedin.com/in/kushagratomar', '#', 'images/student1.jpg', 'password123', 4, 'kushagrasingh240033@acropolis.in', '+91 8435841607'),
+(2, 'Bhagyesh', 'B.Tech Computer Science Engineering', 'student', 'Frontend enthusiast and UI/UX designer.', 'https://github.com/bhagyesh', 'https://linkedin.com/in/bhagyesh', '#', 'images/student2.jpg', 'password123', 4, 'bhagyesh@acropolis.in', '+91 9302266309'),
+(3, 'Harshit', 'B.Tech Computer Science Engineering', 'student', 'Backend engineer and database specialist.', 'https://github.com/harshit', 'https://linkedin.com/in/harshit', '#', 'images/student3.jpg', 'password123', 4, 'harshit@acropolis.in', '+91 9755578278'),
+(4, 'System Admin', 'Administration', 'admin', 'System administrator account.', '', '', '', 'images/admin.jpg', 'admin123', 0, 'admin@acropolis.in', '+91 7509569010');
 
-
-INSERT INTO students (id, name, branch, role, bio, github_url, linkedin_url, resume_url, photo_path, password, semester) VALUES
-(1, 'Kushagra Tomar', 'B.Tech Computer Science Engineering', 'student', 'Passionate full-stack developer focusing on Java and modern web technologies.', 'https://github.com/kushagratomar', 'https://linkedin.com/in/kushagratomar', '#', 'images/student1.jpg', 'password123', 4),
-(2, 'Bhagyesh', 'B.Tech Computer Science Engineering', 'student', 'Frontend enthusiast and UI/UX designer.', 'https://github.com/bhagyesh', 'https://linkedin.com/in/bhagyesh', '#', 'images/student2.jpg', 'password123', 4),
-(3, 'Harshit', 'B.Tech Computer Science Engineering', 'student', 'Backend engineer and database specialist.', 'https://github.com/harshit', 'https://linkedin.com/in/harshit', '#', 'images/student3.jpg', 'password123', 4),
-(4, 'System Admin', 'Administration', 'admin', 'System administrator account.', '', '', '', 'images/admin.jpg', 'admin123', 0);
-
-
-INSERT INTO projects (title, description, tech_stack, github_url, live_demo_url, image_path, student_id) VALUES
-('E-Commerce Platform', 'A full-featured online shopping platform.', 'Java, Spring Boot', 'https://github.com/kushagratomar/ecommerce', '#', 'images/project1.jpg', 1),
-('AI Chat Assistant', 'Intelligent chatbot.', 'Python, React', 'https://github.com/kushagratomar/ai-chat', '#', 'images/project2.jpg', 1),
-('Portfolio Design System', 'Component library built for rapid prototyping.', 'React, TypeScript', 'https://github.com/bhagyesh/design', '#', 'images/project3.jpg', 2),
-('Cloud Infrastructure Monitor', 'Real-time cloud monitoring dashboard.', 'Python, Django', 'https://github.com/harshit/cloud', '#', 'images/project2.jpg', 3);
-
-
+-- Seed Documents
 INSERT INTO documents (student_id, title, file_path) VALUES
-(1, '10th Marksheet', 'documents/10th_marksheet.pdf'),
-(1, '12th Marksheet', 'documents/12th_marksheet.pdf'),
-(1, 'Aadhaar Card', 'documents/aadhaar.pdf'),
-(1, 'Sem-4 Result', 'documents/sem4_result.pdf'),
-(2, '10th Marksheet', 'documents/10th_marksheet.pdf'),
-(2, '12th Marksheet', 'documents/12th_marksheet.pdf'),
-(2, 'Aadhaar Card', 'documents/aadhaar.pdf'),
-(2, 'Sem-4 Result', 'documents/sem4_result.pdf'),
-(3, '10th Marksheet', 'documents/10th_marksheet.pdf'),
-(3, '12th Marksheet', 'documents/12th_marksheet.pdf'),
-(3, 'Aadhaar Card', 'documents/aadhaar.pdf'),
-(3, 'Sem-4 Result', 'documents/sem4_result.pdf');
+(1, '10th Marksheet', 'documents/10th_marksheet.pdf'), (1, '12th Marksheet', 'documents/12th_marksheet.pdf'), (1, 'Aadhaar Card', 'documents/aadhaar.pdf'), (1, 'Sem-4 Result', 'documents/sem4_result.pdf'),
+(2, '10th Marksheet', 'documents/10th_marksheet.pdf'), (2, '12th Marksheet', 'documents/12th_marksheet.pdf'), (2, 'Aadhaar Card', 'documents/aadhaar.pdf'), (2, 'Sem-4 Result', 'documents/sem4_result.pdf'),
+(3, '10th Marksheet', 'documents/10th_marksheet.pdf'), (3, '12th Marksheet', 'documents/12th_marksheet.pdf'), (3, 'Aadhaar Card', 'documents/aadhaar.pdf'), (3, 'Sem-4 Result', 'documents/sem4_result.pdf');
 
+-- Seed Certificates (from patch_certificates)
+INSERT INTO certificates (student_id, title, file_path) VALUES 
+(1, 'AWS Certified Solutions Architect', 'certificates/aws_architect.pdf'),
+(1, 'Google Cloud Professional Developer', 'certificates/gcp_developer.pdf'),
+(2, 'Google UX Design Professional', 'certificates/google_ux.pdf'),
+(2, 'Meta Front-End Developer', 'certificates/meta_frontend.pdf'),
+(3, 'Oracle Certified Professional, Java SE', 'certificates/oracle_java.pdf'),
+(3, 'MongoDB Certified Developer Associate', 'certificates/mongodb_dev.pdf');
 
+-- Seed Clubs
+INSERT INTO clubs (student_id, name, role, description) VALUES
+(1, 'IEEE Student Branch', 'Core Member', 'A global professional organization dedicated to advancing technology for humanity. Organizing technical workshops and symposiums.'),
+(1, 'CodersHigh', 'Competitive Programmer', 'A coding club focused on competitive programming, advanced data structures, algorithms, and hackathons.'),
+(2, 'Google Developer Clubs (GDC)', 'Technical Lead', 'University-based community group for students interested in Google developer technologies and modern web dev.'),
+(3, 'AWS Cloud Club', 'Cloud Architect', 'Student-led community supported by AWS to learn cloud computing architecture and prepare for AWS certifications.');
+
+-- Seed Skills
+INSERT INTO skills (student_id, category, name, proficiency_percent) VALUES
+(1, 'Language', 'Java', 95), (1, 'Language', 'Python', 85), (1, 'Language', 'C++', 80), (1, 'Web', 'HTML/CSS', 90), (1, 'Database', 'MySQL', 85),
+(2, 'Language', 'JavaScript', 95), (2, 'Web', 'React', 90), (2, 'Web', 'HTML/CSS', 95), (2, 'Design', 'Figma', 85), (2, 'Language', 'TypeScript', 80), (2, 'Format', 'JSON', 90),
+(3, 'Language', 'Go', 90), (3, 'Language', 'Rust', 85), (3, 'Language', 'Python', 90), (3, 'Database', 'PostgreSQL', 85), (3, 'DevOps', 'Docker', 80);
+
+-- Seed Projects
+INSERT INTO projects (title, description, tech_stack, github_url, live_demo_url, image_path, student_id) VALUES
+('AI Chat Assistant', 'Intelligent contextual chatbot utilizing NLP models for student queries.', 'Python, React, NLP', 'https://github.com/kushagratomar/ai-chat', '#', 'images/project1.jpg', 1),
+('Quantum Encryption Simulator', 'Visual simulation tool demonstrating QKD principles over a network.', 'Java, JavaFX, Cryptography', 'https://github.com/kushagratomar/quantum-sim', '#', 'images/project2.jpg', 1),
+('E-Commerce Platform', 'A full-featured online shopping platform with payment gateway integration.', 'Java, Spring Boot, MySQL', 'https://github.com/kushagratomar/ecommerce', '#', 'images/project3.jpg', 1),
+('Portfolio Design System', 'Component library built for rapid UI prototyping and consistent design.', 'React, TypeScript, CSS', 'https://github.com/bhagyesh/design', '#', 'images/project3.jpg', 2),
+('Smart Campus IoT Network', 'IoT system using ESP32 to monitor library occupancy and environment.', 'C++, Vue.js, MQTT', 'https://github.com/bhagyesh/iot-campus', '#', 'images/project2.jpg', 2),
+('Decentralized Voting DApp', 'Secure voting application deployed on Ethereum testnet for student elections.', 'Solidity, React, Web3', 'https://github.com/bhagyesh/voting-dapp', '#', 'images/project1.jpg', 2),
+('Cloud Infrastructure Monitor', 'Real-time cloud monitoring dashboard tracking server health.', 'Go, React, Prometheus', 'https://github.com/harshit/cloud', '#', 'images/project1.jpg', 3),
+('Autonomous Drone Navigation', 'Flight controller software utilizing computer vision for obstacle avoidance.', 'Python, OpenCV, ROS', 'https://github.com/harshit/drone-nav', '#', 'images/project2.jpg', 3),
+('FinTech Budgeting App', 'Mobile app aggregating bank data to provide actionable budgeting insights.', 'Rust, Flutter, PostgreSQL', 'https://github.com/harshit/fintech', '#', 'images/project3.jpg', 3);
+
+-- Seed Achievements
+INSERT INTO achievements (student_id, title, description, icon) VALUES
+(1, 'Hackathon Winner', '1st place in state hackathon', 'bi-trophy'),
+(2, 'UI Design Award', 'Best UI/UX for E-commerce app', 'bi-palette'),
+(3, 'Code Optimization', 'Top 5% in Algorithm coding competition', 'bi-code-slash');
+
+-- Seed Contact Messages
+INSERT INTO contact_messages (name, email, subject, message) VALUES
+('Tech Recruiter', 'recruitment@google.com', 'Software Engineering Role', 'Hi! We loved the projects showcased on your dashboard and would like to schedule an interview.'),
+('Startup Founder', 'founder@innovate.co', 'Collaboration Request', 'Your IoT project looks fascinating. Open to collaborating on a commercial version?');
+
+-- Seed Attendance
 INSERT INTO attendance (student_id, subject, total_classes, attended, percentage) VALUES
 (1, 'Data Structures', 40, 36, 90.00),
 (1, 'Computer Networks', 35, 30, 85.71),
@@ -149,11 +192,5 @@ INSERT INTO attendance (student_id, subject, total_classes, attended, percentage
 (2, 'Computer Networks', 35, 28, 80.00),
 (3, 'Data Structures', 40, 32, 80.00),
 (3, 'Computer Networks', 35, 34, 97.14);
-
-
-INSERT INTO achievements (student_id, title, description, icon) VALUES
-(1, 'Hackathon Winner', '1st place in state hackathon', 'bi-trophy'),
-(2, 'UI Design Award', 'Best UI/UX for E-commerce app', 'bi-palette'),
-(3, 'Code Optimization', 'Top 5% in Algorithm coding competition', 'bi-code-slash');
 
 SET FOREIGN_KEY_CHECKS = 1;
