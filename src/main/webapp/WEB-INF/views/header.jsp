@@ -5,70 +5,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Student Portfolio Dashboard — Showcasing student excellence through innovative projects and skills.">
-    <title><c:out value="${pageTitle}" default="StudentDash — Portfolio Dashboard"/></title>
-
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+    <title>AITR DASH</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-
-  
-    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-
-
-<button id="theme-toggle" class="btn btn-expressive position-fixed top-0 end-0 m-3" style="z-index: 1050; border-radius: 50%; width: 50px; height: 50px; padding: 0; box-shadow: 4px 4px 0px var(--border-color); border: 2px solid var(--border-color); background: var(--surface); color: var(--text-main); display: flex; align-items: center; justify-content: center;">
-    <i class="bi bi-moon-fill"></i>
-</button>
-
-
-
-<!-- ============ NAVBAR ============ -->
-<nav class="navbar navbar-expand-lg nav-glass fixed-top">
+<nav class="navbar navbar-expand-lg" style="background: var(--neutral-primary); border-bottom: 4px solid var(--border-default);">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="${pageContext.request.contextPath}/home">
-            <i class="bi bi-mortarboard-fill me-2"></i>StudentDash
+        <a class="navbar-brand bangers-font fs-3" href="${pageContext.request.contextPath}/home" style="color: var(--brand);">
+            <i class="bi bi-controller me-2"></i>AITR DASH
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#mainNav" aria-controls="mainNav"
-                aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="mainNav">
-            <ul class="navbar-nav ms-auto gap-1">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto fw-bold text-uppercase">
                 <li class="nav-item">
-                    <a class="nav-link <c:if test='${currentPage == "home"}'>active</c:if>"
-                       href="${pageContext.request.contextPath}/home">
-                        <i class="bi bi-house-door me-1"></i>Home
-                    </a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/home" style="color: var(--heading-color);">Home</a>
                 </li>
-                <c:if test="${sessionScope.studentRole == 'admin'}">
+                <c:if test="${not empty sessionScope.studentId}">
                     <li class="nav-item">
-                        <a class="nav-link <c:if test='${currentPage == "students"}'>active</c:if>"
-                           href="${pageContext.request.contextPath}/students">
-                            <i class="bi bi-people me-1"></i>Students
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <c:if test='${currentPage == "projects"}'>active</c:if>"
-                           href="${pageContext.request.contextPath}/projects">
-                            <i class="bi bi-code-square me-1"></i>Projects
-                        </a>
+                        <a class="nb-button btn-sm ms-3" href="${pageContext.request.contextPath}/logout">Logout</a>
                     </li>
                 </c:if>
-                <li class="nav-item">
-                    <a class="nav-link <c:if test='${currentPage == "contact"}'>active</c:if>"
-                       href="${pageContext.request.contextPath}/contact">
-                        <i class="bi bi-envelope me-1"></i>Contact
-                    </a>
-                </li>
+                <c:if test="${empty sessionScope.studentId}">
+                    <li class="nav-item">
+                        <a class="nb-button btn-sm ms-3" href="${pageContext.request.contextPath}/login">Login</a>
+                    </li>
+                </c:if>
             </ul>
         </div>
     </div>

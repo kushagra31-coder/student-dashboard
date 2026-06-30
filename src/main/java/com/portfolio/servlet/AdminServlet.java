@@ -57,16 +57,16 @@ public class AdminServlet extends HttpServlet {
             return;
         }
 
-        // ── Students only (no admins in student list) ──────────────────
+        // â”€â”€ Students only (no admins in student list) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         List<Student> students = studentDAO.getStudentsOnly();
         List<Integer> studentIds = students.stream()
                                            .map(Student::getId)
                                            .collect(Collectors.toList());
 
-        // ── Seed random attendance if any student has none ─────────────
+        // â”€â”€ Seed random attendance if any student has none â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         attendanceDAO.seedRandomAttendanceIfMissing(studentIds);
 
-        // ── Per-student data maps ──────────────────────────────────────
+        // â”€â”€ Per-student data maps â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         Map<Integer, List<Project>>     studentProjects     = new HashMap<>();
         Map<Integer, List<Document>>    studentDocuments    = new HashMap<>();
         Map<Integer, List<Skill>>       studentSkills       = new HashMap<>();
@@ -82,13 +82,13 @@ public class AdminServlet extends HttpServlet {
             studentCertificates.put(sid, certificateDAO.getCertificatesByStudentId(sid));
         }
 
-        // ── Attendance (all students, all subjects) ────────────────────
+        // â”€â”€ Attendance (all students, all subjects) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         Map<Integer, Map<String, Attendance>> allAttendance =
                 attendanceDAO.getAllAttendanceGrouped();
 
         List<LoginLog> loginLogs = loginLogDAO.getAllLogs();
 
-        // ── Set attributes ────────────────────────────────────────────
+        // â”€â”€ Set attributes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         request.setAttribute("students",            students);
         request.setAttribute("loginLogs",           loginLogs);
         request.setAttribute("studentProjects",     studentProjects);
@@ -102,5 +102,27 @@ public class AdminServlet extends HttpServlet {
                                                     ? request.getParameter("tab") : "students");
 
         request.getRequestDispatcher("/admin.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);
+        if (session == null || !"admin".equals(session.getAttribute("studentRole"))) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        String action = request.getParameter("action");
+        if ("deleteStudent".equals(action)) {
+            try {
+                int studentId = Integer.parseInt(request.getParameter("studentId"));
+                studentDAO.deleteStudent(studentId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        response.sendRedirect(request.getContextPath() + "/admin?success=true");
     }
 }

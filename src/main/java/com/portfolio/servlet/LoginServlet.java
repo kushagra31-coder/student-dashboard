@@ -32,16 +32,7 @@ public class LoginServlet extends HttpServlet {
         String idStr = request.getParameter("id");
         String password = request.getParameter("password");
 
-        int id = 0;
-        try {
-            if (idStr != null && !idStr.trim().isEmpty()) {
-                id = Integer.parseInt(idStr.trim());
-            }
-        } catch (NumberFormatException e) {
-            // handle parse error by leaving id as 0, which will fail authentication
-        }
-
-        Student student = studentDAO.authenticate(id, password);
+        Student student = studentDAO.authenticate(idStr, password);
 
         if (student != null) {
             HttpSession session = request.getSession();

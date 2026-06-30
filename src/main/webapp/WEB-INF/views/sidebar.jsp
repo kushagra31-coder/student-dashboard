@@ -1,13 +1,40 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div class="sidebar glass-card">
-    <div class="sidebar-brand">
-        <span class="gradient-text">SpaceDash</span>
-    </div>
-    <ul class="sidebar-nav">
-        <li><a href="${pageContext.request.contextPath}/home" class="sidebar-link active"><i class="bi bi-house-door"></i> Home</a></li>
-        <li><a href="${pageContext.request.contextPath}/documents" class="sidebar-link"><i class="bi bi-file-earmark-text"></i> Documents</a></li>
-        <li><a href="${pageContext.request.contextPath}/home#projects" class="sidebar-link"><i class="bi bi-rocket"></i> Projects</a></li>
-        <li><a href="${pageContext.request.contextPath}/contact" class="sidebar-link"><i class="bi bi-envelope"></i> Contact</a></li>
-        <li><a href="${pageContext.request.contextPath}/logout" class="sidebar-link logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
-    </ul>
-</div>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<nav class="nb-sidebar">
+  <!-- Brand -->
+  <div class="nb-sidebar-brand">
+    AITR DASH
+  </div>
+
+  <!-- Nav -->
+  <ul class="list-unstyled">
+    <li>
+      <a href="${pageContext.request.contextPath}/home"
+         class="nb-sidebar-link ${pageContext.request.servletPath == '/home' ? 'active' : ''}">
+        <i class="bi bi-house-fill me-2"></i> Dashboard
+      </a>
+    </li>
+    <li>
+      <a href="${pageContext.request.contextPath}/documents"
+         class="nb-sidebar-link ${pageContext.request.servletPath == '/documents' ? 'active' : ''}">
+        <i class="bi bi-file-earmark-text-fill me-2"></i> Documents
+      </a>
+    </li>
+    <li>
+      <a href="${pageContext.request.contextPath}/home#projects" class="nb-sidebar-link">
+        <i class="bi bi-rocket-fill me-2"></i> Projects
+      </a>
+    </li>
+    <li>
+      <a href="${pageContext.request.contextPath}/home#achievements" class="nb-sidebar-link">
+        <i class="bi bi-trophy-fill me-2"></i> Achievements
+      </a>
+    </li>
+    <li class="my-4" style="border-top: 4px dashed var(--border-default);"></li>
+    <li>
+      <a href="${pageContext.request.contextPath}/logout" class="nb-sidebar-link mt-auto">
+        <i class="bi bi-box-arrow-right me-2"></i> Logout
+      </a>
+    </li>
+  </ul>
+</nav>

@@ -101,14 +101,35 @@ public class StudentDAO {
      * @param password the password
      * @return the matching {@link Student}, or {@code null} if invalid
      */
-    public Student authenticate(int id, String password) {
-        String sql = "SELECT id, name, branch, role, bio, github_url, "
-                   + "linkedin_url, resume_url, photo_path, password, semester, email, phone FROM students WHERE id = ? AND password = ?";
+    public Student authenticate(String identifier, String password) {
+        if (identifier == null || password == null || identifier.trim().isEmpty()) {
+            return null;
+        }
+        identifier = identifier.trim();
+        boolean isNumeric = identifier.matches("\\d+");
+
+        String sql;
+        if (isNumeric) {
+            sql = "SELECT id, name, branch, role, bio, github_url, "
+                + "linkedin_url, resume_url, photo_path, password, semester, email, phone FROM students "
+                + "WHERE (id = ? OR email = ?) AND password = ?";
+        } else {
+            sql = "SELECT id, name, branch, role, bio, github_url, "
+                + "linkedin_url, resume_url, photo_path, password, semester, email, phone FROM students "
+                + "WHERE email = ? AND password = ?";
+        }
+
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, id);
-            ps.setString(2, password);
+            if (isNumeric) {
+                ps.setInt(1, Integer.parseInt(identifier));
+                ps.setString(2, identifier);
+                ps.setString(3, password);
+            } else {
+                ps.setString(1, identifier);
+                ps.setString(2, password);
+            }
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return mapRow(rs);

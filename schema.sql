@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS portfolio_db;
+﻿CREATE DATABASE IF NOT EXISTS portfolio_db;
 USE portfolio_db;
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -113,6 +113,7 @@ CREATE TABLE attendance (
     total_classes INT DEFAULT 0,
     attended INT DEFAULT 0,
     percentage DECIMAL(5,2) DEFAULT 0.00,
+    UNIQUE KEY uq_student_subject (student_id, subject),
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -184,13 +185,22 @@ INSERT INTO contact_messages (name, email, subject, message) VALUES
 ('Tech Recruiter', 'recruitment@google.com', 'Software Engineering Role', 'Hi! We loved the projects showcased on your dashboard and would like to schedule an interview.'),
 ('Startup Founder', 'founder@innovate.co', 'Collaboration Request', 'Your IoT project looks fascinating. Open to collaborating on a commercial version?');
 
--- Seed Attendance
+-- Seed Attendance (RGPV 4th Sem CSIT Subjects)
 INSERT INTO attendance (student_id, subject, total_classes, attended, percentage) VALUES
-(1, 'Data Structures', 40, 36, 90.00),
-(1, 'Computer Networks', 35, 30, 85.71),
-(2, 'Data Structures', 40, 38, 95.00),
-(2, 'Computer Networks', 35, 28, 80.00),
-(3, 'Data Structures', 40, 32, 80.00),
-(3, 'Computer Networks', 35, 34, 97.14);
+(1, 'ADA',    42, 38, 90.48),
+(1, 'ADC M3', 40, 36, 90.00),
+(1, 'DOTNET', 38, 32, 84.21),
+(1, 'DBMS',   45, 42, 93.33),
+(1, 'COA',    40, 35, 87.50),
+(2, 'ADA',    42, 30, 71.43),
+(2, 'ADC M3', 40, 38, 95.00),
+(2, 'DOTNET', 38, 28, 73.68),
+(2, 'DBMS',   45, 40, 88.89),
+(2, 'COA',    40, 22, 55.00),
+(3, 'ADA',    42, 40, 95.24),
+(3, 'ADC M3', 40, 35, 87.50),
+(3, 'DOTNET', 38, 36, 94.74),
+(3, 'DBMS',   45, 41, 91.11),
+(3, 'COA',    40, 38, 95.00);
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -48,10 +48,10 @@ public class loginservlet extends HttpServlet {
         if (role == null) {
             try (Connection conn = DBconnection.getConnection();
                     PreparedStatement stmt = conn.prepareStatement(
-                            "SELECT student_id, name, email, phone, branch, semester FROM students WHERE email = ?")) {
+                            "SELECT student_id, name, email, phone, branch, semester, password FROM students WHERE email = ?")) {
                 stmt.setString(1, email);
                 ResultSet rs = stmt.executeQuery();
-                if (rs.next() && "student123".equals(password)) {
+                if (rs.next() && rs.getString("password").equals(password)) {
                     role = "student";
                     name = rs.getString("name");
                     HttpSession session = request.getSession(true);
@@ -81,7 +81,7 @@ public class loginservlet extends HttpServlet {
             return;
         }
 
-        request.setAttribute("error", "Invalid credentials. Student password is student123.");
+        request.setAttribute("error", "Invalid email/username or password.");
         request.getRequestDispatcher("/JSP/login.jsp").forward(request, response);
     }
 }

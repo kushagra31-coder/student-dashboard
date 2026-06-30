@@ -11,10 +11,6 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-/**
- * Handles admin attendance updates.
- * POST /attendance  — update a single student+subject attendance row.
- */
 @WebServlet("/attendance")
 public class AttendanceServlet extends HttpServlet {
 
@@ -26,28 +22,38 @@ public class AttendanceServlet extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        // Only admin may update attendance
         if (session == null || !"admin".equals(session.getAttribute("studentRole"))) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        try {
-            int    studentId    = Integer.parseInt(request.getParameter("studentId").trim());
-            String subject      = request.getParameter("subject").trim();
-            int    totalClasses = Integer.parseInt(request.getParameter("totalClasses").trim());
-            int    attended     = Integer.parseInt(request.getParameter("attended").trim());
+        String[] sidSubs = request.getParameterValues("sid_sub");
+        if (sidSubs != null) {
+            for (String sidSub : sidSubs) {
+                try {
+                    String[] parts = sidSub.split("__");
+                    if (parts.length == 2) {
+                        int studentId = Integer.parseInt(parts[0]);
+                        String subject = parts[1];
 
-            if (attended > totalClasses) attended = totalClasses;
-            if (attended < 0)           attended = 0;
-            if (totalClasses < 1)       totalClasses = 1;
+                        String attendedStr = request.getParameter("attended_" + studentId + "_" + subject);
+                        String totalStr = request.getParameter("total_" + studentId + "_" + subject);
 
-            attendanceDAO.updateAttendance(studentId, subject, totalClasses, attended);
-        } catch (NumberFormatException e) {
-            // invalid input — silently ignore
+                        if (attendedStr != null && totalStr != null) {
+                            int totalClasses = Integer.parseInt(totalStr.trim());
+                            int attended = Integer.parseInt(attendedStr.trim());
+
+                            if (attended > totalClasses) attended = totalClasses;
+                            if (attended < 0) attended = 0;
+                            if (totalClasses < 1) totalClasses = 1;
+
+                            attendanceDAO.updateAttendance(studentId, subject, totalClasses, attended);
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                }
+            }
         }
-
-        // Redirect back to admin attendance tab
         response.sendRedirect(request.getContextPath() + "/admin?tab=attendance&success=true");
     }
 }

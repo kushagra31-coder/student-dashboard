@@ -67,9 +67,9 @@ public class ProjectDAO {
         return 0;
     }
 
-    // ── Helper ─────────────────────────────────────────────────────────
+    // â”€â”€ Helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-    public void addProject(int studentId, String title, String description, String techStack, String githubUrl) {
+    public void addProject(int studentId, String title, String description, String techStack, String githubUrl, String imagePath) {
         String sql = "INSERT INTO projects (student_id, title, description, tech_stack, github_url, image_path) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -78,7 +78,7 @@ public class ProjectDAO {
             ps.setString(3, description);
             ps.setString(4, techStack);
             ps.setString(5, githubUrl);
-            ps.setString(6, "images/default-project.jpg");
+            ps.setString(6, imagePath != null ? imagePath : "images/default-project.jpg");
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

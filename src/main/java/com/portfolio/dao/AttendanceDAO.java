@@ -12,7 +12,7 @@ import java.util.*;
 public class AttendanceDAO {
 
     public static final List<String> SUBJECTS = Arrays.asList(
-            "ADA", "ADC", "DOTNET", "DBMS", "COA"
+            "ADA", "ADC M3", "DOTNET", "DBMS", "COA"
     );
 
     public Map<String, Attendance> getAttendanceByStudentId(int studentId) {
