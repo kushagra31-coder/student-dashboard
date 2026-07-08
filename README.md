@@ -59,47 +59,47 @@ Follow these steps to run the project locally on your machine.
 - **MySQL Server 8+**
 
 ### 2. Clone the Repository
-\\\ash
+`ash
 git clone https://github.com/kushagra31-coder/student-dashboard
 cd portfolio
-\\\
+`
 
 ### 3. Database Setup (MySQL)
 Create the database:
-\\\sql
+`sql
 CREATE DATABASE portfolio_db;
 USE portfolio_db;
-\\\
+`
 Execute the schema files (found in the root or src/main/resources/):
-\\\ash
+`ash
 mysql -u root -p portfolio_db < schema.sql
-\\\
+`
 
 ### 4. Configure Environment
 Edit the database credentials file located at: src/main/resources/db.properties
-\\\properties
+`properties
 db.url=jdbc:mysql://localhost:3306/portfolio_db?sslMode=REQUIRED&allowPublicKeyRetrieval=true
 db.username=root
 db.password=your_secure_password
-\\\
+`
 *(Note: If using Aiven Cloud, paste your Aiven host URL here instead).*
 
 ### 5. Build and Deploy
 Compile the project using Maven:
-\\\ash
+`ash
 mvn clean package
-\\\
+`
 Copy the generated WAR file to your Tomcat Server:
-\\\ash
+`ash
 cp target/ROOT.war "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\"
-\\\
+`
 Start Tomcat and open your browser to:
 **http://localhost:8080**
 
 ---
 
 ## 📂 Project Structure
-\\\	ext
+`	ext
 portfolio/
 ├── src/
 │   ├── main/
@@ -118,7 +118,7 @@ portfolio/
 │   │       └── *.jsp         # Public views (login, admin, home)
 ├── pom.xml                   # Maven dependencies
 └── README.md
-\\\
+`
 
 ---
 
