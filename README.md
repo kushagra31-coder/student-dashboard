@@ -10,7 +10,7 @@ A modern, Neobrutalist-styled Student Portfolio Dashboard built using **Java Ser
 ---
 
 ## 🚀 Live Demo
-> **[Click Here to View the Hosted Application](#)** *https://portfolio-akaza.azurewebsites.net/login*
+> *https://portfolio-akaza.azurewebsites.net/login*
 
 ---
 
