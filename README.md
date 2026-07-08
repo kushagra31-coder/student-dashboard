@@ -10,7 +10,7 @@ A modern, Neobrutalist-styled Student Portfolio Dashboard built using **Java Ser
 ---
 
 ## 🚀 Live Demo
-> *https://portfolio-akaza.azurewebsites.net/login*
+> **[Click Here to View the Hosted Application](#)** *(Add your deployed link here)*
 
 ---
 
@@ -19,14 +19,14 @@ A modern, Neobrutalist-styled Student Portfolio Dashboard built using **Java Ser
 This application strictly follows the **MVC (Model-View-Controller)** design pattern:
 
 1. **View (JSP/HTML/CSS):** 
-   - The user interacts with the UI (e.g., login.jsp, home.jsp).
+   - The user interacts with the UI (e.g., `login.jsp`, `home.jsp`).
    - The frontend is built with a custom **Neobrutalist Design System** (Bangers typography, dashed borders, clip-path CSS buttons).
 2. **Controller (Java Servlets):** 
-   - Requests are routed through Servlets (e.g., LoginServlet, StudentActionServlet).
-   - Servlets handle routing, HTTP Session validation, input sanitation (Email Regex matching), and file uploads (multipart/form-data).
+   - Requests are routed through Servlets (e.g., `LoginServlet`, `StudentActionServlet`).
+   - Servlets handle routing, HTTP Session validation, input sanitation (Email Regex matching), and file uploads (`multipart/form-data`).
 3. **Model (Java Beans & DAO):** 
-   - Data Access Objects (e.g., StudentDAO, ProjectDAO) execute secure PreparedStatement SQL queries.
-   - Beans (e.g., Student.java, Project.java) transfer data between the DB and the frontend.
+   - Data Access Objects (e.g., `StudentDAO`, `ProjectDAO`) execute secure `PreparedStatement` SQL queries.
+   - Beans (e.g., `Student.java`, `Project.java`) transfer data between the DB and the frontend.
 4. **Database (MySQL):** 
    - The system is connected to a highly available MySQL Database (compatible with both local instances and cloud DBs like Aiven Cloud).
 
@@ -59,47 +59,46 @@ Follow these steps to run the project locally on your machine.
 - **MySQL Server 8+**
 
 ### 2. Clone the Repository
-`ash
+```bash
 git clone https://github.com/kushagra31-coder/student-dashboard
 cd portfolio
-`
+```
 
 ### 3. Database Setup (MySQL)
 Create the database:
-`sql
+```sql
 CREATE DATABASE portfolio_db;
 USE portfolio_db;
-`
-Execute the schema files (found in the root or src/main/resources/):
-`ash
+```
+Execute the schema files (found in the root or `src/main/resources/`):
+```bash
 mysql -u root -p portfolio_db < schema.sql
-`
+```
 
 ### 4. Configure Environment
-Edit the database credentials file located at: src/main/resources/db.properties
-`properties
+Edit the database credentials file located at: `src/main/resources/db.properties`
+```properties
 db.url=jdbc:mysql://localhost:3306/portfolio_db?sslMode=REQUIRED&allowPublicKeyRetrieval=true
 db.username=root
 db.password=your_secure_password
-`
+```
 *(Note: If using Aiven Cloud, paste your Aiven host URL here instead).*
 
 ### 5. Build and Deploy
 Compile the project using Maven:
-`ash
+```bash
 mvn clean package
-`
+```
 Copy the generated WAR file to your Tomcat Server:
-`ash
+```bash
 cp target/ROOT.war "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\"
-`
-Start Tomcat and open your browser to:
-**http://localhost:8080**
+```
+Start your Tomcat server. The webapp will be extracted and deployed automatically.
 
 ---
 
 ## 📂 Project Structure
-`	ext
+```text
 portfolio/
 ├── src/
 │   ├── main/
@@ -118,7 +117,7 @@ portfolio/
 │   │       └── *.jsp         # Public views (login, admin, home)
 ├── pom.xml                   # Maven dependencies
 └── README.md
-`
+```
 
 ---
 
