@@ -2,6 +2,7 @@ package com.portfolio.servlet;
 
 import com.portfolio.dao.StudentDAO;
 import com.portfolio.model.Student;
+import org.mindrot.jbcrypt.BCrypt;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -77,7 +78,7 @@ public class RegisterServlet extends HttpServlet {
         student.setBranch(branch);
         student.setSemester(semester);
         student.setPhone(phone);
-        student.setPassword(password);
+        student.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
         student.setRole("student");
         student.setBio("");
         student.setGithubUrl("");

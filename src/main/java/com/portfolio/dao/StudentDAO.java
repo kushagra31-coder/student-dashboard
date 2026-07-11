@@ -1,6 +1,7 @@
 package com.portfolio.dao;
 
 import com.portfolio.model.Student;
+import org.mindrot.jbcrypt.BCrypt;
 import com.portfolio.util.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +12,8 @@ import java.util.List;
 
 
 public class StudentDAO {
+
+    public static String lastError = null;
 
     
     public List<Student> getAllStudents() {
@@ -137,6 +140,7 @@ public class StudentDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            lastError = e.getClass().getName() + ": " + e.getMessage();
         }
         return null;
     }

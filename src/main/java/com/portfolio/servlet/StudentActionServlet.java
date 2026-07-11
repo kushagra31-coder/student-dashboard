@@ -21,6 +21,10 @@ import jakarta.servlet.http.Part;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.UUID;
+import java.util.Arrays;
+import java.util.List;
 
 @WebServlet("/student-action")
 @MultipartConfig(
@@ -54,12 +58,22 @@ public class StudentActionServlet extends HttpServlet {
                 Part imagePart = request.getPart("imagePathFile");
                 String imagePath = "images/default-project.jpg";
                 if (imagePart != null && imagePart.getSize() > 0) {
-                    String fileName = getSubmittedFileName(imagePart);
+                    String originalFileName = Paths.get(getSubmittedFileName(imagePart)).getFileName().toString();
+                    String ext = "";
+                    if (originalFileName.contains(".")) {
+                        ext = originalFileName.substring(originalFileName.lastIndexOf(".")).toLowerCase();
+                    }
+                    List<String> allowedExts = Arrays.asList(".jpg", ".jpeg", ".png");
+                    if (!allowedExts.contains(ext)) {
+                        throw new IllegalArgumentException("Invalid image type.");
+                    }
+                    String safeFileName = UUID.randomUUID().toString() + ext;
+                    
                     String uploadPath = getServletContext().getRealPath("") + File.separator + "images";
                     File uploadDir = new File(uploadPath);
                     if (!uploadDir.exists()) uploadDir.mkdir();
-                    imagePart.write(uploadPath + File.separator + fileName);
-                    imagePath = "images/" + fileName;
+                    imagePart.write(uploadPath + File.separator + safeFileName);
+                    imagePath = "images/" + safeFileName;
                 }
                 projectDAO.addProject(
                     studentId, 
@@ -93,15 +107,22 @@ public class StudentActionServlet extends HttpServlet {
                 String title = request.getParameter("title");
                 String filePath = "certificates/uploaded.pdf"; // Fallback
                 if (filePart != null && filePart.getSize() > 0) {
-                    String fileName = getSubmittedFileName(filePart);
-                    // Ensure the upload directory exists
+                    String originalFileName = Paths.get(getSubmittedFileName(filePart)).getFileName().toString();
+                    String ext = "";
+                    if (originalFileName.contains(".")) {
+                        ext = originalFileName.substring(originalFileName.lastIndexOf(".")).toLowerCase();
+                    }
+                    List<String> allowedExts = Arrays.asList(".pdf", ".jpg", ".jpeg", ".png");
+                    if (!allowedExts.contains(ext)) {
+                        throw new IllegalArgumentException("Invalid certificate file type.");
+                    }
+                    String safeFileName = UUID.randomUUID().toString() + ext;
+                    
                     String uploadPath = getServletContext().getRealPath("") + File.separator + "certificates";
                     File uploadDir = new File(uploadPath);
                     if (!uploadDir.exists()) uploadDir.mkdir();
-                    
-                    // Write file to disk
-                    filePart.write(uploadPath + File.separator + fileName);
-                    filePath = "certificates/" + fileName;
+                    filePart.write(uploadPath + File.separator + safeFileName);
+                    filePath = "certificates/" + safeFileName;
                 }
                 certificateDAO.addCertificate(studentId, title, filePath);
             }

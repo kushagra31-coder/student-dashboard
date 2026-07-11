@@ -196,7 +196,7 @@
                                 </label>
                                 <input type="email" name="email" class="form-control"
                                        placeholder="you@college.ac.in"
-                                       value="<c:out value='${prevEmail}'/>" required>
+                                       value="<c:out value='${prevEmail}'/>" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address (e.g. user@domain.com)" required>
                             </div>
 
                             <!-- Phone -->
@@ -329,6 +329,16 @@ function checkMatch() {
 }
 if (pwdInput)  pwdInput.addEventListener('input', checkMatch);
 if (cpwdInput) cpwdInput.addEventListener('input', checkMatch);
+</script>
+<script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const emailInput = document.querySelector('input[name="email"]').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailInput)) {
+            e.preventDefault();
+            alert("Please enter a valid email address ending with a proper domain (e.g., @gmail.com or @college.ac.in)");
+        }
+    });
 </script>
 </body>
 </html>

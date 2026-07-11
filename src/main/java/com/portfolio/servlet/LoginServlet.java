@@ -51,7 +51,11 @@ public class LoginServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/home");
             }
         } else {
-            request.setAttribute("errorMessage", "Invalid Student ID or Password.");
+            String errorMsg = "Invalid Student ID or Password.";
+            if (com.portfolio.dao.StudentDAO.lastError != null) {
+                errorMsg += " (Database Diagnostic Info: " + com.portfolio.dao.StudentDAO.lastError + ")";
+            }
+            request.setAttribute("errorMessage", errorMsg);
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
     }
